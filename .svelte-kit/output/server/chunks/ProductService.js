@@ -161,7 +161,8 @@ const ProductUpgradeStatements = [
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         name TEXT NOT NULL,
         description TEXT,
-        price NUMERIC
+        price NUMERIC NOT NULL,
+        category TEXT NOT NULL
         );`
     ]
   }
@@ -207,8 +208,8 @@ class ProductService {
     return (await this.db.query("SELECT * FROM products;")).values;
   }
   async addProduct(Product) {
-    const sql = `INSERT INTO products (name, description, price) VALUES (?,?,?);`;
-    const res = await this.db.run(sql, [Product.name, Product.description, Product.price]);
+    const sql = `INSERT INTO products (name, description, price, category) VALUES (?,?,?,?);`;
+    const res = await this.db.run(sql, [Product.name, Product.description, Product.price, Product.category]);
     if (res.changes !== void 0 && res.changes.lastId !== void 0 && res.changes.lastId > 0) {
       return res.changes.lastId;
     } else {

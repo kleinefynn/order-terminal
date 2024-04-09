@@ -13,7 +13,7 @@
 	import { Input } from '$lib/components/ui/input/index.js';
 	import * as Sheet from '$lib/components/ui/sheet/index.js';
 	import * as Tooltip from '$lib/components/ui/tooltip/index.js';
-
+	import { page } from "$app/stores";
 
 	// SETUP SQLITE;
 	import { afterUpdate } from 'svelte';
@@ -55,11 +55,7 @@
         }
     });
 
-
-
 </script>
-
-<AppInitializer />
 
 <div class="flex min-h-screen w-full flex-col bg-muted/40">
 	<aside class="fixed inset-y-0 left-0 z-10 hidden w-14 flex-col border-r bg-background sm:flex">
@@ -68,7 +64,10 @@
 				<Tooltip.Trigger asChild let:builder>
 					<a
 						href="/"
-						class="flex h-9 w-9 items-center justify-center rounded-lg text-muted-foreground transition-colors hover:text-foreground md:h-8 md:w-8"
+						class="flex h-9 w-9 items-center justify-center rounded-lg transition-colors hover:text-foreground md:h-8 md:w-8"
+						class:text-accent-foreground={$page.url.pathname === "/"}
+						class:bg-accent={$page.url.pathname === "/"}
+						class:text-muted-foreground={$page.url.pathname !== "/"}
 						use:builder.action
 						{...builder}
 					>
@@ -82,7 +81,10 @@
 				<Tooltip.Trigger asChild let:builder>
 					<a
 						href="/kasse"
-						class="flex h-9 w-9 items-center justify-center rounded-lg bg-accent text-accent-foreground transition-colors hover:text-foreground md:h-8 md:w-8"
+						class="flex h-9 w-9 items-center justify-center rounded-lg transition-colors hover:text-foreground md:h-8 md:w-8"
+						class:text-accent-foreground={$page.url.pathname === "/kasse"}
+						class:bg-accent={$page.url.pathname === "/kasse"}
+						class:text-muted-foreground={$page.url.pathname !== "/kasse"}
 						use:builder.action
 						{...builder}
 					>
@@ -96,7 +98,10 @@
 				<Tooltip.Trigger asChild let:builder>
 					<a
 						href="/produkte"
-						class="flex h-9 w-9 items-center justify-center rounded-lg text-muted-foreground transition-colors hover:text-foreground md:h-8 md:w-8"
+						class="flex h-9 w-9 items-center justify-center rounded-lg transition-colors hover:text-foreground md:h-8 md:w-8"
+						class:text-accent-foreground={$page.url.pathname === "/produkte"}
+						class:bg-accent={$page.url.pathname === "/produkte"}
+						class:text-muted-foreground={$page.url.pathname !== "/produkte"}
 						use:builder.action
 						{...builder}
 					>
@@ -110,7 +115,10 @@
 				<Tooltip.Trigger asChild let:builder>
 					<a
 						href="/auswertung"
-						class="flex h-9 w-9 items-center justify-center rounded-lg text-muted-foreground transition-colors hover:text-foreground md:h-8 md:w-8"
+						class="flex h-9 w-9 items-center justify-center rounded-lg transition-colors hover:text-foreground md:h-8 md:w-8"
+						class:text-accent-foreground={$page.url.pathname === "/auswertung"}
+						class:bg-accent={$page.url.pathname === "/auswertung"}
+						class:text-muted-foreground={$page.url.pathname !== "/auswertung"}
 						use:builder.action
 						{...builder}
 					>
@@ -126,7 +134,10 @@
 				<Tooltip.Trigger asChild let:builder>
 					<a
 						href="/einstellungen"
-						class="flex h-9 w-9 items-center justify-center rounded-lg text-muted-foreground transition-colors hover:text-foreground md:h-8 md:w-8"
+						class="flex h-9 w-9 items-center justify-center rounded-lg transition-colors hover:text-foreground md:h-8 md:w-8"
+						class:text-accent-foreground={$page.url.pathname === "/einstellungen"}
+						class:bg-accent={$page.url.pathname === "/einstellungen"}
+						class:text-muted-foreground={$page.url.pathname !== "/einstellungen"}
 						use:builder.action
 						{...builder}
 					>
@@ -146,32 +157,41 @@
 				<Sheet.Trigger asChild let:builder>
 					<Button builders={[builder]} size="icon" variant="outline" class="sm:hidden">
 						<PanelLeft class="h-5 w-5" />
-						<span class="sr-only">Toggle Menu</span>
+						<span class="sr-only">Menu</span>
 					</Button>
 				</Sheet.Trigger>
 				<Sheet.Content side="left" class="sm:max-w-xs">
 					<nav class="grid gap-6 text-lg font-medium">
 						<a
 							href="/"
-							class="flex items-center gap-4 px-2.5 text-muted-foreground hover:text-foreground"
+							class="flex items-center gap-4 px-2.5 hover:text-foreground"
+							class:text-accent-foreground={$page.url.pathname === "/"}
+							class:text-muted-foreground={$page.url.pathname !== "/"}
 						>
 							<Home class="h-5 w-5" />
 							Dashboard
 						</a>
-						<a href="/kasse" class="flex items-center gap-4 px-2.5 text-foreground">
+						<a href="/kasse" 
+							class="flex items-center gap-4 px-2.5 hover:text-foreground"
+							class:text-accent-foreground={$page.url.pathname === "/kasse"}
+							class:text-muted-foreground={$page.url.pathname !== "/kasse"}>
 							<ShoppingCart class="h-5 w-5" />
 							Erfassen
 						</a>
 						<a
 							href="produkte"
-							class="flex items-center gap-4 px-2.5 text-muted-foreground hover:text-foreground"
+							class="flex items-center gap-4 px-2.5 hover:text-foreground"
+							class:text-accent-foreground={$page.url.pathname === "/produkte"}
+							class:text-muted-foreground={$page.url.pathname !== "/produkte"}
 						>
 							<Package class="h-5 w-5" />
 							Produkte
 						</a>
 						<a
 							href="auswertung"
-							class="flex items-center gap-4 px-2.5 text-muted-foreground hover:text-foreground"
+							class="flex items-center gap-4 px-2.5 hover:text-foreground"
+							class:text-accent-foreground={$page.url.pathname === "/auswertung"}
+							class:text-muted-foreground={$page.url.pathname !== "/auswertung"}
 						>
 							<LineChart class="h-5 w-5" />
 							Auswertung
@@ -194,17 +214,9 @@
 					</Breadcrumb.Item>-->
 				</Breadcrumb.List>
 			</Breadcrumb.Root>
-			<div class="relative ml-auto flex-1 md:grow-0">
-				<Search class="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
-				<Input
-					type="search"
-					placeholder="Search..."
-					class="w-full rounded-lg bg-background pl-8 md:w-[200px] lg:w-[320px]"
-				/>
-			</div>
-
 		</header>
 		<main>
+			<AppInitializer />
 			<slot />
 		</main>
 	</div>

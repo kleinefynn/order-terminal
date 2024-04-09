@@ -8,7 +8,7 @@ class AppInitializer {
         // Perform initialization tasks, such as setting up plugin
         await this.setupPlugin();
         if (this.platform === 'web') {                
-            await new Promise(r => setTimeout(r, 100));
+            await new Promise(r => setTimeout(r, 500));
         }
         await this.setupProductDatabase();
 
@@ -30,6 +30,7 @@ class AppInitializer {
 
     private async setupProductDatabase() {
         try {
+            // wait for database to be ready.
             let v = lastValueFrom(productService.isInitCompleted);
             await productService.initializeDatabase();
             if (this.platform === 'web') {

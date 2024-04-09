@@ -19,16 +19,16 @@
 				>
 					<Card.Header>
 						<Card.Title>
-							<div class="flex w-32 justify-between">
+							<div class="flex w-32 justify-between select-none">
 								<p class="">{fee.name}</p>
 							</div>
 						</Card.Title>
 						<Card.Description>
-							<p class="">{fee.description ?? ''}</p>
+							<p class="select-none">{fee.description ?? ''}</p>
 						</Card.Description>
 					</Card.Header>
 					<Card.Content class="flex">
-						<p class="absolute bottom-4 text-sm">{fee.price.toFixed(2)}€</p>
+						<p class="absolute bottom-4 text-sm select-none">{fee.price.toFixed(2)}€</p>
 					</Card.Content>
 				</Card.Root>
 			{/each}

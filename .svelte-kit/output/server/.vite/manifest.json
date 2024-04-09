@@ -51,6 +51,14 @@
     "file": "chunks/ssr.js",
     "name": "ssr"
   },
+  "_stores.js": {
+    "file": "chunks/stores.js",
+    "name": "stores",
+    "imports": [
+      "_ssr.js",
+      "_exports.js"
+    ]
+  },
   "node_modules/@sveltejs/kit/src/runtime/components/error.svelte": {
     "file": "entries/fallbacks/error.svelte.js",
     "name": "entries/fallbacks/error.svelte",
@@ -58,7 +66,7 @@
     "isEntry": true,
     "imports": [
       "_ssr.js",
-      "_exports.js"
+      "_stores.js"
     ]
   },
   "node_modules/@sveltejs/kit/src/runtime/server/index.js": {
@@ -81,10 +89,11 @@
       "_ssr.js",
       "_index2.js",
       "_ProductService.js",
-      "_index.js"
+      "_index.js",
+      "_stores.js"
     ],
     "css": [
-      "_app/immutable/assets/_layout.C53lmnYb.css"
+      "_app/immutable/assets/_layout.B8K4M2C9.css"
     ]
   },
   "src/routes/+layout.ts": {

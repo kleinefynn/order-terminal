@@ -1,5 +1,5 @@
-import { writable, type Writable } from 'svelte/store';
-import type { Item, ShoppingCart } from './Item';
+import { writable } from 'svelte/store';
+import type { ShoppingCart } from './Item';
 import '../products.store';
 import type { Product } from '$lib/database/models/Product';
 
@@ -31,7 +31,7 @@ const change = (item: ShoppingCart, amount: string | number | null) => {
         return;
     }
 
-    const new_amount = Number(amount) < 0 ? 0 : Number(amount);
+    const new_amount = Number(amount) < 1 ? 1 : Number(amount);
 
     update((items: Warenkorb) => {
         cart_item.amount = new_amount;

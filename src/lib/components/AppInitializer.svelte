@@ -5,9 +5,11 @@
 
     let isError = false;
 
+    let errorMessage = "";
 
     appInitializer.initialize().then(() => {}).catch((e) => {
         isError = true;
+        errorMessage = e;
         console.error(e);
     });
 
@@ -15,11 +17,11 @@
 </script>
 
 {#if isError}
-<Alert.Root variant="destructive">
+<Alert.Root variant="destructive" class="mx-auto my-4 w-1/2">
 	<TriangleAlert class="h-4 w-4" />
 	<Alert.Title>Error</Alert.Title>
 	<Alert.Description
-	  >Your session has expired. Please login again.</Alert.Description
+	  >{errorMessage}</Alert.Description
 	>
 </Alert.Root>
 

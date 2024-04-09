@@ -1,11 +1,12 @@
 import { c as create_ssr_component, v as validate_component, a as compute_rest_props, b as spread, e as escape_attribute_value, d as escape_object, f as add_attribute, s as setContext, g as getContext, h as subscribe } from "../../chunks/ssr.js";
-import { I as Icon, n as noop, i as isHTMLElement, t as toWritableStores, o as omit, a as overridable, g as generateIds, m as makeElement, e as executeCallbacks, b as addEventListener, c as addMeltEventListener, r as removeUndefined, s as styleToString, p as portalAttr, d as effect, f as createElHelpers, k as kbd, h as isTouch, j as tick, l as getPortalDestination, u as usePortal, q as isElement, v as isDocument, w as isBrowser, x as createBitAttrs, y as createDialog, z as removeUndefined$1, A as getOptionUpdater, B as createDispatcher, C as fade, D as fly, E as Button, F as Input } from "../../chunks/index2.js";
+import { I as Icon, n as noop, i as isHTMLElement, t as toWritableStores, o as omit, a as overridable, g as generateIds, m as makeElement, e as executeCallbacks, b as addEventListener, c as addMeltEventListener, r as removeUndefined, s as styleToString, p as portalAttr, d as effect, f as createElHelpers, k as kbd, h as isTouch, j as tick, l as getPortalDestination, u as usePortal, q as isElement, v as isDocument, w as isBrowser, x as createBitAttrs, y as createDialog, z as removeUndefined$1, A as getOptionUpdater, B as createDispatcher, C as fade, D as fly, E as Button } from "../../chunks/index2.js";
 import "clsx";
 import { c as cn, f as flyAndScale, s as sqliteService, p as productService, i as is_void } from "../../chunks/ProductService.js";
 import "dequal";
 import { d as derived, w as writable } from "../../chunks/index.js";
 import { tv } from "tailwind-variants";
 import { flip, offset, shift, arrow, size, autoUpdate, computePosition } from "@floating-ui/dom";
+import { p as page } from "../../chunks/stores.js";
 import { Capacitor } from "@capacitor/core";
 import { applyPolyfills, defineCustomElements } from "jeep-sqlite/loader/index.js";
 import { lastValueFrom } from "rxjs";
@@ -75,18 +76,6 @@ const Panel_left = create_ssr_component(($$result, $$props, $$bindings, slots) =
   })}`;
 });
 const PanelLeft = Panel_left;
-const Search = create_ssr_component(($$result, $$props, $$bindings, slots) => {
-  const iconNode = [
-    ["circle", { "cx": "11", "cy": "11", "r": "8" }],
-    ["path", { "d": "m21 21-4.3-4.3" }]
-  ];
-  return `${validate_component(Icon, "Icon").$$render($$result, Object.assign({}, { name: "search" }, $$props, { iconNode }), {}, {
-    default: () => {
-      return `${slots.default ? slots.default({}) : ``}`;
-    }
-  })}`;
-});
-const Search$1 = Search;
 const Settings = create_ssr_component(($$result, $$props, $$bindings, slots) => {
   const iconNode = [
     [
@@ -1557,6 +1546,8 @@ const AppInitializer2 = create_ssr_component(($$result, $$props, $$bindings, slo
   })}` : ``}`;
 });
 const Layout = create_ssr_component(($$result, $$props, $$bindings, slots) => {
+  let $page, $$unsubscribe_page;
+  $$unsubscribe_page = subscribe(page, (value) => $page = value);
   const platform = Capacitor.getPlatform();
   if (typeof window !== "undefined") {
     applyPolyfills().then(() => {
@@ -1572,6 +1563,7 @@ const Layout = create_ssr_component(($$result, $$props, $$bindings, slots) => {
       });
     }
   }
+  $$unsubscribe_page();
   return `${validate_component(AppInitializer2, "AppInitializer").$$render($$result, {}, {}, {})} <div class="flex min-h-screen w-full flex-col bg-muted/40"><aside class="fixed inset-y-0 left-0 z-10 hidden w-14 flex-col border-r bg-background sm:flex"><nav class="flex flex-col items-center gap-4 px-2 py-4">${validate_component(Root, "Tooltip.Root").$$render($$result, {}, {}, {
     default: () => {
       return `${validate_component(Trigger, "Tooltip.Trigger").$$render($$result, { asChild: true }, {}, {
@@ -1580,11 +1572,13 @@ const Layout = create_ssr_component(($$result, $$props, $$bindings, slots) => {
             [
               { href: "/" },
               {
-                class: "flex h-9 w-9 items-center justify-center rounded-lg text-muted-foreground transition-colors hover:text-foreground md:h-8 md:w-8"
+                class: "flex h-9 w-9 items-center justify-center rounded-lg transition-colors hover:text-foreground md:h-8 md:w-8"
               },
               escape_object(builder)
             ],
-            {}
+            {
+              classes: ($page.url.pathname === "/" ? "text-accent-foreground" : "") + " " + ($page.url.pathname === "/" ? "bg-accent" : "") + " " + ($page.url.pathname !== "/" ? "text-muted-foreground" : "")
+            }
           )}>${validate_component(Home$1, "Home").$$render($$result, { class: "h-5 w-5" }, {}, {})} <span class="sr-only" data-svelte-h="svelte-1677gfz">Dashboard</span></a>`;
         }
       })} ${validate_component(Tooltip_content, "Tooltip.Content").$$render($$result, { side: "right" }, {}, {
@@ -1601,11 +1595,13 @@ const Layout = create_ssr_component(($$result, $$props, $$bindings, slots) => {
             [
               { href: "/kasse" },
               {
-                class: "flex h-9 w-9 items-center justify-center rounded-lg bg-accent text-accent-foreground transition-colors hover:text-foreground md:h-8 md:w-8"
+                class: "flex h-9 w-9 items-center justify-center rounded-lg transition-colors hover:text-foreground md:h-8 md:w-8"
               },
               escape_object(builder)
             ],
-            {}
+            {
+              classes: ($page.url.pathname === "/kasse" ? "text-accent-foreground" : "") + " " + ($page.url.pathname === "/kasse" ? "bg-accent" : "") + " " + ($page.url.pathname !== "/kasse" ? "text-muted-foreground" : "")
+            }
           )}>${validate_component(ShoppingCart, "ShoppingCart").$$render($$result, { class: "h-5 w-5" }, {}, {})} <span class="sr-only" data-svelte-h="svelte-12rano">Bestellung</span></a>`;
         }
       })} ${validate_component(Tooltip_content, "Tooltip.Content").$$render($$result, { side: "right" }, {}, {
@@ -1622,11 +1618,13 @@ const Layout = create_ssr_component(($$result, $$props, $$bindings, slots) => {
             [
               { href: "/produkte" },
               {
-                class: "flex h-9 w-9 items-center justify-center rounded-lg text-muted-foreground transition-colors hover:text-foreground md:h-8 md:w-8"
+                class: "flex h-9 w-9 items-center justify-center rounded-lg transition-colors hover:text-foreground md:h-8 md:w-8"
               },
               escape_object(builder)
             ],
-            {}
+            {
+              classes: ($page.url.pathname === "/produkte" ? "text-accent-foreground" : "") + " " + ($page.url.pathname === "/produkte" ? "bg-accent" : "") + " " + ($page.url.pathname !== "/produkte" ? "text-muted-foreground" : "")
+            }
           )}>${validate_component(Package$1, "Package").$$render($$result, { class: "h-5 w-5" }, {}, {})} <span class="sr-only" data-svelte-h="svelte-ynb9f5">Produkte</span></a>`;
         }
       })} ${validate_component(Tooltip_content, "Tooltip.Content").$$render($$result, { side: "right" }, {}, {
@@ -1643,11 +1641,13 @@ const Layout = create_ssr_component(($$result, $$props, $$bindings, slots) => {
             [
               { href: "/auswertung" },
               {
-                class: "flex h-9 w-9 items-center justify-center rounded-lg text-muted-foreground transition-colors hover:text-foreground md:h-8 md:w-8"
+                class: "flex h-9 w-9 items-center justify-center rounded-lg transition-colors hover:text-foreground md:h-8 md:w-8"
               },
               escape_object(builder)
             ],
-            {}
+            {
+              classes: ($page.url.pathname === "/auswertung" ? "text-accent-foreground" : "") + " " + ($page.url.pathname === "/auswertung" ? "bg-accent" : "") + " " + ($page.url.pathname !== "/auswertung" ? "text-muted-foreground" : "")
+            }
           )}>${validate_component(LineChart, "LineChart").$$render($$result, { class: "h-5 w-5" }, {}, {})} <span class="sr-only" data-svelte-h="svelte-gufj5o">Auswertung</span></a>`;
         }
       })} ${validate_component(Tooltip_content, "Tooltip.Content").$$render($$result, { side: "right" }, {}, {
@@ -1664,11 +1664,13 @@ const Layout = create_ssr_component(($$result, $$props, $$bindings, slots) => {
             [
               { href: "/einstellungen" },
               {
-                class: "flex h-9 w-9 items-center justify-center rounded-lg text-muted-foreground transition-colors hover:text-foreground md:h-8 md:w-8"
+                class: "flex h-9 w-9 items-center justify-center rounded-lg transition-colors hover:text-foreground md:h-8 md:w-8"
               },
               escape_object(builder)
             ],
-            {}
+            {
+              classes: ($page.url.pathname === "/einstellungen" ? "text-accent-foreground" : "") + " " + ($page.url.pathname === "/einstellungen" ? "bg-accent" : "") + " " + ($page.url.pathname !== "/einstellungen" ? "text-muted-foreground" : "")
+            }
           )}>${validate_component(Settings$1, "Settings").$$render($$result, { class: "h-5 w-5" }, {}, {})} <span class="sr-only" data-svelte-h="svelte-3jnvtq">Settings</span></a>`;
         }
       })} ${validate_component(Tooltip_content, "Tooltip.Content").$$render($$result, { side: "right" }, {}, {
@@ -1692,17 +1694,29 @@ const Layout = create_ssr_component(($$result, $$props, $$bindings, slots) => {
             {},
             {
               default: () => {
-                return `${validate_component(PanelLeft, "PanelLeft").$$render($$result, { class: "h-5 w-5" }, {}, {})} <span class="sr-only" data-svelte-h="svelte-1t6m3jq">Toggle Menu</span>`;
+                return `${validate_component(PanelLeft, "PanelLeft").$$render($$result, { class: "h-5 w-5" }, {}, {})} <span class="sr-only" data-svelte-h="svelte-sxdmm8">Menu</span>`;
               }
             }
           )}`;
         }
       })} ${validate_component(Sheet_content, "Sheet.Content").$$render($$result, { side: "left", class: "sm:max-w-xs" }, {}, {
         default: () => {
-          return `<nav class="grid gap-6 text-lg font-medium"><a href="/" class="flex items-center gap-4 px-2.5 text-muted-foreground hover:text-foreground">${validate_component(Home$1, "Home").$$render($$result, { class: "h-5 w-5" }, {}, {})}
-							Dashboard</a> <a href="/kasse" class="flex items-center gap-4 px-2.5 text-foreground">${validate_component(ShoppingCart, "ShoppingCart").$$render($$result, { class: "h-5 w-5" }, {}, {})}
-							Erfassen</a> <a href="produkte" class="flex items-center gap-4 px-2.5 text-muted-foreground hover:text-foreground">${validate_component(Package$1, "Package").$$render($$result, { class: "h-5 w-5" }, {}, {})}
-							Produkte</a> <a href="auswertung" class="flex items-center gap-4 px-2.5 text-muted-foreground hover:text-foreground">${validate_component(LineChart, "LineChart").$$render($$result, { class: "h-5 w-5" }, {}, {})}
+          return `<nav class="grid gap-6 text-lg font-medium"><a href="/" class="${[
+            "flex items-center gap-4 px-2.5 hover:text-foreground",
+            ($page.url.pathname === "/" ? "text-accent-foreground" : "") + " " + ($page.url.pathname !== "/" ? "text-muted-foreground" : "")
+          ].join(" ").trim()}">${validate_component(Home$1, "Home").$$render($$result, { class: "h-5 w-5" }, {}, {})}
+							Dashboard</a> <a href="/kasse" class="${[
+            "flex items-center gap-4 px-2.5 hover:text-foreground",
+            ($page.url.pathname === "/kasse" ? "text-accent-foreground" : "") + " " + ($page.url.pathname !== "/kasse" ? "text-muted-foreground" : "")
+          ].join(" ").trim()}">${validate_component(ShoppingCart, "ShoppingCart").$$render($$result, { class: "h-5 w-5" }, {}, {})}
+							Erfassen</a> <a href="produkte" class="${[
+            "flex items-center gap-4 px-2.5 hover:text-foreground",
+            ($page.url.pathname === "/produkte" ? "text-accent-foreground" : "") + " " + ($page.url.pathname !== "/produkte" ? "text-muted-foreground" : "")
+          ].join(" ").trim()}">${validate_component(Package$1, "Package").$$render($$result, { class: "h-5 w-5" }, {}, {})}
+							Produkte</a> <a href="auswertung" class="${[
+            "flex items-center gap-4 px-2.5 hover:text-foreground",
+            ($page.url.pathname === "/auswertung" ? "text-accent-foreground" : "") + " " + ($page.url.pathname !== "/auswertung" ? "text-muted-foreground" : "")
+          ].join(" ").trim()}">${validate_component(LineChart, "LineChart").$$render($$result, { class: "h-5 w-5" }, {}, {})}
 							Auswertung</a></nav>`;
         }
       })}`;
@@ -1723,23 +1737,7 @@ const Layout = create_ssr_component(($$result, $$props, $$bindings, slots) => {
         }
       })}`;
     }
-  })} <div class="relative ml-auto flex-1 md:grow-0">${validate_component(Search$1, "Search").$$render(
-    $$result,
-    {
-      class: "absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground"
-    },
-    {},
-    {}
-  )} ${validate_component(Input, "Input").$$render(
-    $$result,
-    {
-      type: "search",
-      placeholder: "Search...",
-      class: "w-full rounded-lg bg-background pl-8 md:w-[200px] lg:w-[320px]"
-    },
-    {},
-    {}
-  )}</div></header> <main>${slots.default ? slots.default({}) : ``}</main></div></div>`;
+  })}</header> <main>${slots.default ? slots.default({}) : ``}</main></div></div>`;
 });
 export {
   Layout as default

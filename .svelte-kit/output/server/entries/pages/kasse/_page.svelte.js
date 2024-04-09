@@ -1,4 +1,4 @@
-import { c as create_ssr_component, a as compute_rest_props, b as spread, e as escape_attribute_value, d as escape_object, h as subscribe, j as each, v as validate_component, i as escape } from "../../../chunks/ssr.js";
+import { c as create_ssr_component, a as compute_rest_props, b as spread, e as escape_attribute_value, d as escape_object, h as subscribe, j as each, i as escape, v as validate_component } from "../../../chunks/ssr.js";
 import { c as cn, i as is_void } from "../../../chunks/ProductService.js";
 import "clsx";
 import { p as products } from "../../../chunks/products.store.js";
@@ -85,37 +85,42 @@ const Card_title = create_ssr_component(($$result, $$props, $$bindings, slots) =
 const Page = create_ssr_component(($$result, $$props, $$bindings, slots) => {
   let $products, $$unsubscribe_products;
   $$unsubscribe_products = subscribe(products, (value) => $products = value);
+  {
+    $products.entries();
+  }
   $$unsubscribe_products();
-  return `<div class="w-full"><h5 class="mb-2 text-xl font-bold" data-svelte-h="svelte-x2ad93">Eintrittskarten</h5> <div class="mx-auto flex w-full flex-col flex-wrap gap-4 md:flex-row">${each($products, (fee) => {
-    return `${validate_component(Card, "Card.Root").$$render(
-      $$result,
-      {
-        class: "relative w-full cursor-pointer hover:bg-red-100 lg:w-fit"
-      },
-      {},
-      {
-        default: () => {
-          return `${validate_component(Card_header, "Card.Header").$$render($$result, {}, {}, {
-            default: () => {
-              return `${validate_component(Card_title, "Card.Title").$$render($$result, {}, {}, {
-                default: () => {
-                  return `<div class="flex w-32 justify-between"><p class="">${escape(fee.name)}</p></div> `;
-                }
-              })} ${validate_component(Card_description, "Card.Description").$$render($$result, {}, {}, {
-                default: () => {
-                  return `<p class="">${escape(fee.description ?? "")}</p> `;
-                }
-              })} `;
-            }
-          })} ${validate_component(Card_content, "Card.Content").$$render($$result, { class: "flex" }, {}, {
-            default: () => {
-              return `<p class="absolute bottom-4 font-normal">${escape(fee.price)}€</p> `;
-            }
-          })} `;
+  return `<div class="w-full">${each($products.entries(), ([category, list]) => {
+    return `<div class="mb-4"><h5 class="mb-2 text-xl font-bold">${escape(category)}</h5> <div class="mx-auto flex w-full flex-col flex-wrap gap-4 md:flex-row">${each(list, (fee) => {
+      return `${validate_component(Card, "Card.Root").$$render(
+        $$result,
+        {
+          class: "relative w-full cursor-pointer hover:bg-red-100 lg:w-fit"
+        },
+        {},
+        {
+          default: () => {
+            return `${validate_component(Card_header, "Card.Header").$$render($$result, {}, {}, {
+              default: () => {
+                return `${validate_component(Card_title, "Card.Title").$$render($$result, {}, {}, {
+                  default: () => {
+                    return `<div class="flex w-32 justify-between"><p class="">${escape(fee.name)}</p></div> `;
+                  }
+                })} ${validate_component(Card_description, "Card.Description").$$render($$result, {}, {}, {
+                  default: () => {
+                    return `<p class="">${escape(fee.description ?? "")}</p> `;
+                  }
+                })} `;
+              }
+            })} ${validate_component(Card_content, "Card.Content").$$render($$result, { class: "flex" }, {}, {
+              default: () => {
+                return `<p class="absolute bottom-4 text-sm">${escape(fee.price.toFixed(2))}€</p> `;
+              }
+            })} `;
+          }
         }
-      }
-    )}`;
-  })}</div></div> `;
+      )}`;
+    })}</div> </div>`;
+  })}</div>`;
 });
 export {
   Page as default

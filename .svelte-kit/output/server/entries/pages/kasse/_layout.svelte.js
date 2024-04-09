@@ -1,7 +1,7 @@
-import { s as setContext, g as getContext, c as create_ssr_component, h as subscribe$1, a as compute_rest_props, b as spread, d as escape_object, f as add_attribute, v as validate_component, e as escape_attribute_value, j as each, i as escape } from "../../../chunks/ssr.js";
-import { t as toWritableStores, m as makeElement, x as createBitAttrs, y as createDialog, z as removeUndefined, A as getOptionUpdater, B as createDispatcher, I as Icon, G as buttonVariants, C as fade, F as Input, E as Button } from "../../../chunks/index2.js";
-import "dequal";
+import { s as setContext, g as getContext, c as create_ssr_component, h as subscribe$1, a as compute_rest_props, b as spread, d as escape_object, f as add_attribute, e as escape_attribute_value, v as validate_component, j as each, i as escape } from "../../../chunks/ssr.js";
+import { t as toWritableStores, m as makeElement, x as createBitAttrs, y as createDialog, z as removeUndefined, A as getOptionUpdater, B as createDispatcher, I as Icon, F as buttonVariants, C as fade, E as Button } from "../../../chunks/index2.js";
 import { i as is_void, c as cn, f as flyAndScale } from "../../../chunks/ProductService.js";
+import "dequal";
 import "clsx";
 import { d as derived, w as writable } from "../../../chunks/index.js";
 import "../../../chunks/products.store.js";
@@ -450,6 +450,24 @@ const Separator$1 = create_ssr_component(($$result, $$props, $$bindings, slots) 
   $$unsubscribe_root();
   return `${asChild ? `${slots.default ? slots.default({ builder }) : ``}` : `<div${spread([escape_object(builder), escape_object($$restProps)], {})}${add_attribute("this", el, 0)}></div>`}`;
 });
+const Input = create_ssr_component(($$result, $$props, $$bindings, slots) => {
+  let $$restProps = compute_rest_props($$props, ["class", "value"]);
+  let { class: className = void 0 } = $$props;
+  let { value = void 0 } = $$props;
+  if ($$props.class === void 0 && $$bindings.class && className !== void 0)
+    $$bindings.class(className);
+  if ($$props.value === void 0 && $$bindings.value && value !== void 0)
+    $$bindings.value(value);
+  return `<input${spread(
+    [
+      {
+        class: escape_attribute_value(cn("flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50", className))
+      },
+      escape_object($$restProps)
+    ],
+    {}
+  )}${add_attribute("value", value, 0)}>`;
+});
 const Separator = create_ssr_component(($$result, $$props, $$bindings, slots) => {
   let $$restProps = compute_rest_props($$props, ["class", "orientation", "decorative"]);
   let { class: className = void 0 } = $$props;
@@ -810,26 +828,26 @@ const Trigger = Alert_dialog_trigger;
 let items = {};
 const { subscribe, set, update } = writable(items);
 const addItem = (item) => {
-  let cart_item = items[item.name];
+  let cart_item = items[item.id];
   update((items2) => {
-    cart_item === void 0 ? items2[item.name] = { name: item.name, price: item.price, amount: 1 } : items2[item.name].amount += 1;
+    cart_item === void 0 ? items2[item.id] = { amount: 1, product: { ...item } } : items2[item.id].amount += 1;
     return items2;
   });
 };
 const change = (item, amount) => {
-  let cart_item = items[item.name];
+  let cart_item = items[item.product.id];
   if (cart_item === void 0) {
     return;
   }
-  const new_amount = Number(amount) < 0 ? 0 : Number(amount);
+  const new_amount = Number(amount) < 1 ? 1 : Number(amount);
   update((items2) => {
     cart_item.amount = new_amount;
     return items2;
   });
 };
-const remove = (itemName) => {
+const remove = (id) => {
   update((items2) => {
-    delete items2[itemName];
+    delete items2[id];
     return items2;
   });
 };
@@ -870,13 +888,9 @@ const Layout = create_ssr_component(($$result, $$props, $$bindings, slots) => {
                 default: () => {
                   return `Menge`;
                 }
-              })} ${validate_component(Table_head, "Table.Head").$$render($$result, {}, {}, {
-                default: () => {
-                  return `Preis`;
-                }
               })} ${validate_component(Table_head, "Table.Head").$$render($$result, { class: "text-right" }, {}, {
                 default: () => {
-                  return `Gesamtpreis`;
+                  return `Preis`;
                 }
               })}`;
             }
@@ -932,7 +946,7 @@ const Layout = create_ssr_component(($$result, $$props, $$bindings, slots) => {
                   }
                 })} ${validate_component(Table_cell, "Table.Cell").$$render($$result, { class: "font-medium" }, {}, {
                   default: () => {
-                    return `${escape(korb.name)}`;
+                    return `${escape(korb.product.name)}`;
                   }
                 })} ${validate_component(Table_cell, "Table.Cell").$$render($$result, {}, {}, {
                   default: () => {
@@ -948,17 +962,25 @@ const Layout = create_ssr_component(($$result, $$props, $$bindings, slots) => {
                       {}
                     )}`;
                   }
-                })} ${validate_component(Table_cell, "Table.Cell").$$render($$result, {}, {}, {
-                  default: () => {
-                    return `${escape(korb.price)}€`;
-                  }
                 })} ${validate_component(Table_cell, "Table.Cell").$$render($$result, { class: "text-right" }, {}, {
                   default: () => {
-                    return `${escape(korb.price * korb.amount)}€`;
+                    return `<p>${escape((korb.product.price * korb.amount).toFixed(2))}€</p> <p class="text-xs text-muted-foreground">${escape(korb.product.price.toFixed(2))}€</p> `;
                   }
                 })} `;
               }
             })}`;
+          })} ${validate_component(Table_row, "Table.Row").$$render($$result, { class: "bg-secondary" }, {}, {
+            default: () => {
+              return `${validate_component(Table_cell, "Table.Cell").$$render($$result, {}, {}, {})} ${validate_component(Table_cell, "Table.Cell").$$render($$result, {}, {}, {
+                default: () => {
+                  return `Summe`;
+                }
+              })} ${validate_component(Table_cell, "Table.Cell").$$render($$result, {}, {}, {})} ${validate_component(Table_cell, "Table.Cell").$$render($$result, { class: "text-right" }, {}, {
+                default: () => {
+                  return `${escape(Object.values($warenkorb).map((entry) => entry.amount * entry.product.price).reduce((partial, v) => partial + v, 0).toFixed(2))}€`;
+                }
+              })}`;
+            }
           })}`;
         }
       })}`;

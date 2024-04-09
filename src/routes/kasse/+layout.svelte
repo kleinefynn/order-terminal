@@ -6,8 +6,6 @@
 	import Trash2 from 'lucide-svelte/icons/trash-2';
 	import * as AlertDialog from '$lib/components/ui/alert-dialog';
 	import warenkorb from './warenkorb.store';
-	import { map } from 'rxjs';
-	Math.s
 
 </script>
 
@@ -31,8 +29,7 @@
 					<Table.Head>Löschen</Table.Head>
 					<Table.Head class="w-[100px]">Name</Table.Head>
 					<Table.Head>Menge</Table.Head>
-					<Table.Head>Preis</Table.Head>
-					<Table.Head class="text-right">Gesamtpreis</Table.Head>
+					<Table.Head class="text-right">Preis</Table.Head>
 				</Table.Row>
 			</Table.Header>
 			<Table.Body>
@@ -58,14 +55,15 @@
 						</Table.Cell>
 						<Table.Cell class="font-medium">{korb.product.name}</Table.Cell>
 						<Table.Cell><Input type="number" min="1" class="w-16" value={korb.amount} on:change={(v) => {warenkorb.change(korb, v.currentTarget?.value);}} /></Table.Cell>
-						<Table.Cell>{korb.product.price.toFixed(2)}€</Table.Cell>
-						<Table.Cell class="text-right">{(korb.product.price * korb.amount).toFixed(2)}€</Table.Cell>
+						<Table.Cell class="text-right">
+							<p>{(korb.product.price * korb.amount).toFixed(2)}€</p>
+							<p class="text-xs text-muted-foreground">{korb.product.price.toFixed(2)}€</p>
+						</Table.Cell>
 					</Table.Row>
 				{/each}
 				<Table.Row class="bg-secondary">
 					<Table.Cell></Table.Cell>
 					<Table.Cell>Summe</Table.Cell>
-					<Table.Cell></Table.Cell>
 					<Table.Cell></Table.Cell>
 					<Table.Cell class="text-right">
 						{
