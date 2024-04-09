@@ -1,9 +1,10 @@
 import { s as setContext, g as getContext, c as create_ssr_component, h as subscribe$1, a as compute_rest_props, b as spread, d as escape_object, f as add_attribute, v as validate_component, e as escape_attribute_value, j as each, i as escape } from "../../../chunks/ssr.js";
 import { t as toWritableStores, m as makeElement, x as createBitAttrs, y as createDialog, z as removeUndefined, A as getOptionUpdater, B as createDispatcher, I as Icon, G as buttonVariants, C as fade, F as Input, E as Button } from "../../../chunks/index2.js";
 import "dequal";
-import { i as is_void, c as cn, f as flyAndScale } from "../../../chunks/utils.js";
+import { i as is_void, c as cn, f as flyAndScale } from "../../../chunks/ProductService.js";
 import "clsx";
 import { d as derived, w as writable } from "../../../chunks/index.js";
+import "../../../chunks/products.store.js";
 const defaults = {
   orientation: "horizontal",
   decorative: false
@@ -1006,7 +1007,7 @@ const Layout = create_ssr_component(($$result, $$props, $$bindings, slots) => {
         }
       })}`;
     }
-  })}</div></aside> </div>`;
+  })}</div></aside></div>`;
 });
 export {
   Layout as default

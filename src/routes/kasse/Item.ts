@@ -1,12 +1,6 @@
-export interface Item {
-    name: string,
-    // todo: better type for currency
-    price: number,
-    description?: string,
-}
+import type { Product } from "$lib/database/models/Product";
 
 export interface ShoppingCart {
-    name: string,
-    price: number,
+    product: Product,
     amount: number,
 }

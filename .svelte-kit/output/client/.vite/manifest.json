@@ -1,10 +1,11 @@
 {
   ".svelte-kit/generated/client-optimized/app.js": {
-    "file": "_app/immutable/entry/app.Bp8SONuw.js",
+    "file": "_app/immutable/entry/app.Bv9BZzwA.js",
     "name": "entry/app",
     "src": ".svelte-kit/generated/client-optimized/app.js",
     "isEntry": true,
     "imports": [
+      "_preload-helper.D6kgxu3v.js",
       "_scheduler.BEUQHxPi.js",
       "_index.BfKu3xeS.js"
     ],
@@ -20,7 +21,7 @@
     ]
   },
   ".svelte-kit/generated/client-optimized/nodes/0.js": {
-    "file": "_app/immutable/nodes/0.Bs21KYfp.js",
+    "file": "_app/immutable/nodes/0.B6-gbrZH.js",
     "name": "nodes/0",
     "src": ".svelte-kit/generated/client-optimized/nodes/0.js",
     "isEntry": true,
@@ -28,16 +29,21 @@
     "imports": [
       "_scheduler.BEUQHxPi.js",
       "_index.BfKu3xeS.js",
-      "_utils.BJICskwK.js",
-      "_index.BmOx3uD3.js",
-      "_index.B7dWTU1O.js"
+      "_ProductService.kyZpH7-y.js",
+      "_index.C38Ci1Ry.js",
+      "_index.B7dWTU1O.js",
+      "_preload-helper.D6kgxu3v.js"
+    ],
+    "dynamicImports": [
+      "node_modules/jeep-sqlite/dist/esm/polyfills/dom.js",
+      "_core-js.BMcFR_Xg.js"
     ],
     "css": [
-      "_app/immutable/assets/0.Be3pULeX.css"
+      "_app/immutable/assets/0.DcUUS0kD.css"
     ]
   },
   ".svelte-kit/generated/client-optimized/nodes/1.js": {
-    "file": "_app/immutable/nodes/1.CiBg6IvB.js",
+    "file": "_app/immutable/nodes/1.B19c8BB6.js",
     "name": "nodes/1",
     "src": ".svelte-kit/generated/client-optimized/nodes/1.js",
     "isEntry": true,
@@ -45,11 +51,11 @@
     "imports": [
       "_scheduler.BEUQHxPi.js",
       "_index.BfKu3xeS.js",
-      "_entry.Ci6-00AD.js"
+      "_entry.CkqRwvN8.js"
     ]
   },
   ".svelte-kit/generated/client-optimized/nodes/2.js": {
-    "file": "_app/immutable/nodes/2.BJpMYqKX.js",
+    "file": "_app/immutable/nodes/2.xpjMNyef.js",
     "name": "nodes/2",
     "src": ".svelte-kit/generated/client-optimized/nodes/2.js",
     "isEntry": true,
@@ -57,10 +63,10 @@
     "imports": [
       "_scheduler.BEUQHxPi.js",
       "_index.BfKu3xeS.js",
-      "_utils.BJICskwK.js",
-      "_index.BmOx3uD3.js",
+      "_ProductService.kyZpH7-y.js",
+      "_index.C38Ci1Ry.js",
       "_index.B7dWTU1O.js",
-      "_stores.CBIiENg-.js"
+      "_warenkorb.store.zJw5NeYz.js"
     ]
   },
   ".svelte-kit/generated/client-optimized/nodes/3.js": {
@@ -97,7 +103,7 @@
     ]
   },
   ".svelte-kit/generated/client-optimized/nodes/6.js": {
-    "file": "_app/immutable/nodes/6.DSG2y_ba.js",
+    "file": "_app/immutable/nodes/6.De-Br9qN.js",
     "name": "nodes/6",
     "src": ".svelte-kit/generated/client-optimized/nodes/6.js",
     "isEntry": true,
@@ -105,8 +111,8 @@
     "imports": [
       "_scheduler.BEUQHxPi.js",
       "_index.BfKu3xeS.js",
-      "_utils.BJICskwK.js",
-      "_stores.CBIiENg-.js"
+      "_ProductService.kyZpH7-y.js",
+      "_warenkorb.store.zJw5NeYz.js"
     ]
   },
   ".svelte-kit/generated/client-optimized/nodes/7.js": {
@@ -120,8 +126,25 @@
       "_index.BfKu3xeS.js"
     ]
   },
-  "_entry.Ci6-00AD.js": {
-    "file": "_app/immutable/chunks/entry.Ci6-00AD.js",
+  "_ProductService.kyZpH7-y.js": {
+    "file": "_app/immutable/chunks/ProductService.kyZpH7-y.js",
+    "name": "ProductService",
+    "imports": [
+      "_index.BfKu3xeS.js",
+      "_scheduler.BEUQHxPi.js",
+      "_preload-helper.D6kgxu3v.js"
+    ],
+    "dynamicImports": [
+      "node_modules/@capacitor-community/sqlite/dist/esm/web.js"
+    ]
+  },
+  "_core-js.BMcFR_Xg.js": {
+    "file": "_app/immutable/chunks/core-js.BMcFR_Xg.js",
+    "name": "core-js",
+    "isDynamicEntry": true
+  },
+  "_entry.CkqRwvN8.js": {
+    "file": "_app/immutable/chunks/entry.CkqRwvN8.js",
     "name": "entry",
     "imports": [
       "_scheduler.BEUQHxPi.js",
@@ -142,42 +165,54 @@
       "_scheduler.BEUQHxPi.js"
     ]
   },
-  "_index.BmOx3uD3.js": {
-    "file": "_app/immutable/chunks/index.BmOx3uD3.js",
+  "_index.C38Ci1Ry.js": {
+    "file": "_app/immutable/chunks/index.C38Ci1Ry.js",
     "name": "index",
     "imports": [
       "_scheduler.BEUQHxPi.js",
       "_index.BfKu3xeS.js",
-      "_utils.BJICskwK.js",
+      "_ProductService.kyZpH7-y.js",
       "_index.B7dWTU1O.js"
     ]
+  },
+  "_preload-helper.D6kgxu3v.js": {
+    "file": "_app/immutable/chunks/preload-helper.D6kgxu3v.js",
+    "name": "preload-helper"
   },
   "_scheduler.BEUQHxPi.js": {
     "file": "_app/immutable/chunks/scheduler.BEUQHxPi.js",
     "name": "scheduler"
   },
-  "_stores.CBIiENg-.js": {
-    "file": "_app/immutable/chunks/stores.CBIiENg-.js",
-    "name": "stores",
+  "_warenkorb.store.zJw5NeYz.js": {
+    "file": "_app/immutable/chunks/warenkorb.store.zJw5NeYz.js",
+    "name": "warenkorb.store",
     "imports": [
-      "_index.B7dWTU1O.js"
+      "_index.B7dWTU1O.js",
+      "_ProductService.kyZpH7-y.js"
     ]
   },
-  "_utils.BJICskwK.js": {
-    "file": "_app/immutable/chunks/utils.BJICskwK.js",
-    "name": "utils",
+  "node_modules/@capacitor-community/sqlite/dist/esm/web.js": {
+    "file": "_app/immutable/chunks/web.CjbrZ0qt.js",
+    "name": "web",
+    "src": "node_modules/@capacitor-community/sqlite/dist/esm/web.js",
+    "isDynamicEntry": true,
     "imports": [
-      "_index.BfKu3xeS.js",
-      "_scheduler.BEUQHxPi.js"
+      "_ProductService.kyZpH7-y.js"
     ]
   },
   "node_modules/@sveltejs/kit/src/runtime/client/entry.js": {
-    "file": "_app/immutable/entry/start.kvzfxFmi.js",
+    "file": "_app/immutable/entry/start.CYkp4OOX.js",
     "name": "entry/start",
     "src": "node_modules/@sveltejs/kit/src/runtime/client/entry.js",
     "isEntry": true,
     "imports": [
-      "_entry.Ci6-00AD.js"
+      "_entry.CkqRwvN8.js"
     ]
+  },
+  "node_modules/jeep-sqlite/dist/esm/polyfills/dom.js": {
+    "file": "_app/immutable/chunks/dom.BaNnATbG.js",
+    "name": "dom",
+    "src": "node_modules/jeep-sqlite/dist/esm/polyfills/dom.js",
+    "isDynamicEntry": true
   }
 }

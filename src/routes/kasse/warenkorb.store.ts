@@ -1,19 +1,22 @@
 import { writable, type Writable } from 'svelte/store';
 import type { Item, ShoppingCart } from './Item';
+import '../products.store';
+import type { Product } from '$lib/database/models/Product';
 
 type Warenkorb = { [id: string] : ShoppingCart; };
 
 let items: Warenkorb = {};
 
+
 const {subscribe, set, update} = writable(items);
 
-const addItem = (item: Item) => {
-    let cart_item: ShoppingCart | undefined = items[item.name];
+const addItem = (item: Product) => {
+    let cart_item: ShoppingCart | undefined = items[item.id];
 
     update((items: Warenkorb) => {
         cart_item === undefined ?
-            items[item.name] = {name: item.name, price: item.price, amount: 1} :
-            items[item.name].amount += 1;
+            items[item.id] = {amount: 1, product: {...item}} :
+            items[item.id].amount += 1;
         
         return items;
     });
@@ -21,7 +24,7 @@ const addItem = (item: Item) => {
 
 
 const change = (item: ShoppingCart, amount: string | number | null) => {
-    let cart_item: ShoppingCart | undefined = items[item.name];
+    let cart_item: ShoppingCart | undefined = items[item.product.id];
     
 
     if (cart_item === undefined) {
@@ -36,9 +39,9 @@ const change = (item: ShoppingCart, amount: string | number | null) => {
     });
 }
 
-const remove = (itemName: string) => {
+const remove = (id: number) => {
     update((items: Warenkorb) => {
-        delete items[itemName];
+        delete items[id];
         return items;
     });
 }

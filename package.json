@@ -53,10 +53,9 @@
     "clsx": "^2.1.0",
     "cmdk-sv": "^0.0.17",
     "embla-carousel-svelte": "^8.0.0",
-    "reflect-metadata": "^0.1.13",
+    "jeep-sqlite": "^2.6.2",
+    "rxjs": "^7.8.1",
     "tailwind-merge": "^2.2.2",
-    "tailwind-variants": "^0.2.1",
-    "typeorm": "0.3.20",
-    "sqlite3": "^5.0.2"
+    "tailwind-variants": "^0.2.1"
   }
 }

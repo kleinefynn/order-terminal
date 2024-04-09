@@ -8,6 +8,10 @@
       "_internal.js"
     ]
   },
+  "_ProductService.js": {
+    "file": "chunks/ProductService.js",
+    "name": "ProductService"
+  },
   "_exports.js": {
     "file": "chunks/exports.js",
     "name": "exports"
@@ -24,7 +28,7 @@
     "name": "index",
     "imports": [
       "_ssr.js",
-      "_utils.js",
+      "_ProductService.js",
       "_index.js"
     ]
   },
@@ -35,13 +39,17 @@
       "_ssr.js"
     ]
   },
+  "_products.store.js": {
+    "file": "chunks/products.store.js",
+    "name": "products.store",
+    "imports": [
+      "_ProductService.js",
+      "_index.js"
+    ]
+  },
   "_ssr.js": {
     "file": "chunks/ssr.js",
     "name": "ssr"
-  },
-  "_utils.js": {
-    "file": "chunks/utils.js",
-    "name": "utils"
   },
   "node_modules/@sveltejs/kit/src/runtime/components/error.svelte": {
     "file": "entries/fallbacks/error.svelte.js",
@@ -72,11 +80,11 @@
     "imports": [
       "_ssr.js",
       "_index2.js",
-      "_utils.js",
+      "_ProductService.js",
       "_index.js"
     ],
     "css": [
-      "_app/immutable/assets/_layout.iTqo2uDo.css"
+      "_app/immutable/assets/_layout.C53lmnYb.css"
     ]
   },
   "src/routes/+layout.ts": {
@@ -120,8 +128,9 @@
     "imports": [
       "_ssr.js",
       "_index2.js",
-      "_utils.js",
-      "_index.js"
+      "_ProductService.js",
+      "_index.js",
+      "_products.store.js"
     ]
   },
   "src/routes/kasse/+page.svelte": {
@@ -131,7 +140,8 @@
     "isEntry": true,
     "imports": [
       "_ssr.js",
-      "_utils.js"
+      "_ProductService.js",
+      "_products.store.js"
     ]
   },
   "src/routes/produkte/+page.svelte": {

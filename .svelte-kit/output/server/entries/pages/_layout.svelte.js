@@ -1,11 +1,14 @@
 import { c as create_ssr_component, v as validate_component, a as compute_rest_props, b as spread, e as escape_attribute_value, d as escape_object, f as add_attribute, s as setContext, g as getContext, h as subscribe } from "../../chunks/ssr.js";
 import { I as Icon, n as noop, i as isHTMLElement, t as toWritableStores, o as omit, a as overridable, g as generateIds, m as makeElement, e as executeCallbacks, b as addEventListener, c as addMeltEventListener, r as removeUndefined, s as styleToString, p as portalAttr, d as effect, f as createElHelpers, k as kbd, h as isTouch, j as tick, l as getPortalDestination, u as usePortal, q as isElement, v as isDocument, w as isBrowser, x as createBitAttrs, y as createDialog, z as removeUndefined$1, A as getOptionUpdater, B as createDispatcher, C as fade, D as fly, E as Button, F as Input } from "../../chunks/index2.js";
 import "clsx";
-import { c as cn, f as flyAndScale } from "../../chunks/utils.js";
+import { c as cn, f as flyAndScale, s as sqliteService, p as productService, i as is_void } from "../../chunks/ProductService.js";
 import "dequal";
 import { d as derived, w as writable } from "../../chunks/index.js";
 import { tv } from "tailwind-variants";
 import { flip, offset, shift, arrow, size, autoUpdate, computePosition } from "@floating-ui/dom";
+import { Capacitor } from "@capacitor/core";
+import { applyPolyfills, defineCustomElements } from "jeep-sqlite/loader/index.js";
+import { lastValueFrom } from "rxjs";
 const Home = create_ssr_component(($$result, $$props, $$bindings, slots) => {
   const iconNode = [
     [
@@ -1411,8 +1414,165 @@ const Tooltip_content = create_ssr_component(($$result, $$props, $$bindings, slo
 });
 const Root = Tooltip;
 const Trigger = Tooltip_trigger;
+let AppInitializer$1 = class AppInitializer {
+  platform = sqliteService.getPlatform();
+  async initialize() {
+    await this.setupPlugin();
+    if (this.platform === "web") {
+      await new Promise((r) => setTimeout(r, 100));
+    }
+    await this.setupProductDatabase();
+  }
+  async setupPlugin() {
+    console.log("Setting up plugins...");
+    try {
+      if (this.platform === "web") {
+        await sqliteService.initWebStore();
+      }
+      return;
+    } catch (err) {
+      const msg = err.message ? err.message : err;
+      throw new Error(`AppInitializer setupPlugin: ${msg}`);
+    }
+  }
+  async setupProductDatabase() {
+    try {
+      let v = lastValueFrom(productService.isInitCompleted);
+      await productService.initializeDatabase();
+      if (this.platform === "web") {
+        await sqliteService.saveToStore(productService.getDatabaseName());
+      }
+      await v;
+      return;
+    } catch (err) {
+      const msg = err.message ? err.message : err;
+      throw new Error(`AppInitializer setupUserDatabase: ${msg}`);
+    }
+  }
+};
+const appInitializer = new AppInitializer$1();
+const Alert = create_ssr_component(($$result, $$props, $$bindings, slots) => {
+  let $$restProps = compute_rest_props($$props, ["class", "variant"]);
+  let { class: className = void 0 } = $$props;
+  let { variant = "default" } = $$props;
+  if ($$props.class === void 0 && $$bindings.class && className !== void 0)
+    $$bindings.class(className);
+  if ($$props.variant === void 0 && $$bindings.variant && variant !== void 0)
+    $$bindings.variant(variant);
+  return `<div${spread(
+    [
+      {
+        class: escape_attribute_value(cn(alertVariants({ variant }), className))
+      },
+      escape_object($$restProps),
+      { role: "alert" }
+    ],
+    {}
+  )}>${slots.default ? slots.default({}) : ``}</div>`;
+});
+const Alert_description = create_ssr_component(($$result, $$props, $$bindings, slots) => {
+  let $$restProps = compute_rest_props($$props, ["class"]);
+  let { class: className = void 0 } = $$props;
+  if ($$props.class === void 0 && $$bindings.class && className !== void 0)
+    $$bindings.class(className);
+  return `<div${spread(
+    [
+      {
+        class: escape_attribute_value(cn("text-sm [&_p]:leading-relaxed", className))
+      },
+      escape_object($$restProps)
+    ],
+    {}
+  )}>${slots.default ? slots.default({}) : ``}</div>`;
+});
+const Alert_title = create_ssr_component(($$result, $$props, $$bindings, slots) => {
+  let $$restProps = compute_rest_props($$props, ["class", "level"]);
+  let { class: className = void 0 } = $$props;
+  let { level = "h5" } = $$props;
+  if ($$props.class === void 0 && $$bindings.class && className !== void 0)
+    $$bindings.class(className);
+  if ($$props.level === void 0 && $$bindings.level && level !== void 0)
+    $$bindings.level(level);
+  return `${((tag) => {
+    return tag ? `<${level}${spread(
+      [
+        {
+          class: escape_attribute_value(cn("mb-1 font-medium leading-none tracking-tight", className))
+        },
+        escape_object($$restProps)
+      ],
+      {}
+    )}>${is_void(tag) ? "" : `${slots.default ? slots.default({}) : ``}`}${is_void(tag) ? "" : `</${tag}>`}` : "";
+  })(level)}`;
+});
+const alertVariants = tv({
+  base: "relative w-full rounded-lg border p-4 [&:has(svg)]:pl-11 [&>svg+div]:translate-y-[-3px] [&>svg]:absolute [&>svg]:left-4 [&>svg]:top-4 [&>svg]:text-foreground",
+  variants: {
+    variant: {
+      default: "bg-background text-foreground",
+      destructive: "border-destructive/50 text-destructive text-destructive dark:border-destructive [&>svg]:text-destructive"
+    }
+  },
+  defaultVariants: {
+    variant: "default"
+  }
+});
+const Triangle_alert = create_ssr_component(($$result, $$props, $$bindings, slots) => {
+  const iconNode = [
+    [
+      "path",
+      {
+        "d": "m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3"
+      }
+    ],
+    ["path", { "d": "M12 9v4" }],
+    ["path", { "d": "M12 17h.01" }]
+  ];
+  return `${validate_component(Icon, "Icon").$$render($$result, Object.assign({}, { name: "triangle-alert" }, $$props, { iconNode }), {}, {
+    default: () => {
+      return `${slots.default ? slots.default({}) : ``}`;
+    }
+  })}`;
+});
+const TriangleAlert = Triangle_alert;
+const AppInitializer2 = create_ssr_component(($$result, $$props, $$bindings, slots) => {
+  let isError = false;
+  appInitializer.initialize().then(() => {
+  }).catch((e) => {
+    isError = true;
+    console.error(e);
+  });
+  return `${isError ? `${validate_component(Alert, "Alert.Root").$$render($$result, { variant: "destructive" }, {}, {
+    default: () => {
+      return `${validate_component(TriangleAlert, "TriangleAlert").$$render($$result, { class: "h-4 w-4" }, {}, {})} ${validate_component(Alert_title, "Alert.Title").$$render($$result, {}, {}, {
+        default: () => {
+          return `Error`;
+        }
+      })} ${validate_component(Alert_description, "Alert.Description").$$render($$result, {}, {}, {
+        default: () => {
+          return `Your session has expired. Please login again.`;
+        }
+      })}`;
+    }
+  })}` : ``}`;
+});
 const Layout = create_ssr_component(($$result, $$props, $$bindings, slots) => {
-  return `<div class="flex min-h-screen w-full flex-col bg-muted/40"><aside class="fixed inset-y-0 left-0 z-10 hidden w-14 flex-col border-r bg-background sm:flex"><nav class="flex flex-col items-center gap-4 px-2 py-4">${validate_component(Root, "Tooltip.Root").$$render($$result, {}, {}, {
+  const platform = Capacitor.getPlatform();
+  if (typeof window !== "undefined") {
+    applyPolyfills().then(() => {
+      defineCustomElements(window);
+    });
+    if (platform === "web") {
+      const jeepEl = document.createElement("jeep-sqlite");
+      document.body.appendChild(jeepEl);
+      customElements.whenDefined("jeep-sqlite").then(() => {
+      }).catch((err) => {
+        console.error(`Error: ${err}`);
+        throw new Error(`Error: ${err}`);
+      });
+    }
+  }
+  return `${validate_component(AppInitializer2, "AppInitializer").$$render($$result, {}, {}, {})} <div class="flex min-h-screen w-full flex-col bg-muted/40"><aside class="fixed inset-y-0 left-0 z-10 hidden w-14 flex-col border-r bg-background sm:flex"><nav class="flex flex-col items-center gap-4 px-2 py-4">${validate_component(Root, "Tooltip.Root").$$render($$result, {}, {}, {
     default: () => {
       return `${validate_component(Trigger, "Tooltip.Trigger").$$render($$result, { asChild: true }, {}, {
         default: ({ builder }) => {

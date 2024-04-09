@@ -13,7 +13,53 @@
 	import { Input } from '$lib/components/ui/input/index.js';
 	import * as Sheet from '$lib/components/ui/sheet/index.js';
 	import * as Tooltip from '$lib/components/ui/tooltip/index.js';
+
+
+	// SETUP SQLITE;
+	import { afterUpdate } from 'svelte';
+	import { Capacitor } from '@capacitor/core';
+	import {
+        defineCustomElements as jeepSqlite,
+        applyPolyfills,
+    } from 'jeep-sqlite/loader';
+	import AppInitializer from "$lib/components/AppInitializer.svelte";
+
+	let toRender = false;
+    const platform = Capacitor.getPlatform();
+
+    // Check if we're in the browser environment
+    if (typeof window !== 'undefined') {
+        applyPolyfills().then(() => {
+            jeepSqlite(window);
+        });
+        if (platform === "web") {
+            const jeepEl = document.createElement("jeep-sqlite");
+            document.body.appendChild(jeepEl);
+            customElements.whenDefined('jeep-sqlite').then(() => {
+                toRender = true;
+            })
+            .catch ((err) => {
+                console.error(`Error: ${err}`);
+                throw new Error(`Error: ${err}`)
+            });
+        } else {
+            toRender = true;
+        }
+    } else {
+        toRender = true;
+    }
+    // Wait until after the component updates to check if `jeep-sqlite` is defined
+    afterUpdate(() => {
+        if (!toRender) {
+            return;
+        }
+    });
+
+
+
 </script>
+
+<AppInitializer />
 
 <div class="flex min-h-screen w-full flex-col bg-muted/40">
 	<aside class="fixed inset-y-0 left-0 z-10 hidden w-14 flex-col border-r bg-background sm:flex">

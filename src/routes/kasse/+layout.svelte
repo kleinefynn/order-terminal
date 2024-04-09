@@ -5,7 +5,9 @@
 	import * as Table from '$lib/components/ui/table';
 	import Trash2 from 'lucide-svelte/icons/trash-2';
 	import * as AlertDialog from '$lib/components/ui/alert-dialog';
-	import warenkorb from './stores';
+	import warenkorb from './warenkorb.store';
+	import { map } from 'rxjs';
+	Math.s
 
 </script>
 
@@ -49,17 +51,30 @@
 									</AlertDialog.Header>
 									<AlertDialog.Footer>
 										<AlertDialog.Cancel>Zurück</AlertDialog.Cancel>
-										<AlertDialog.Action on:click={() => warenkorb.remove(korb.name)}>Löschen</AlertDialog.Action>
+										<AlertDialog.Action on:click={() => warenkorb.remove(korb.product.id)}>Löschen</AlertDialog.Action>
 									</AlertDialog.Footer>
 								</AlertDialog.Content>
 							</AlertDialog.Root>
 						</Table.Cell>
-						<Table.Cell class="font-medium">{korb.name}</Table.Cell>
+						<Table.Cell class="font-medium">{korb.product.name}</Table.Cell>
 						<Table.Cell><Input type="number" min="1" class="w-16" value={korb.amount} on:change={(v) => {warenkorb.change(korb, v.currentTarget?.value);}} /></Table.Cell>
-						<Table.Cell>{korb.price}€</Table.Cell>
-						<Table.Cell class="text-right">{korb.price * korb.amount}€</Table.Cell>
+						<Table.Cell>{korb.product.price.toFixed(2)}€</Table.Cell>
+						<Table.Cell class="text-right">{(korb.product.price * korb.amount).toFixed(2)}€</Table.Cell>
 					</Table.Row>
 				{/each}
+				<Table.Row class="bg-secondary">
+					<Table.Cell></Table.Cell>
+					<Table.Cell>Summe</Table.Cell>
+					<Table.Cell></Table.Cell>
+					<Table.Cell></Table.Cell>
+					<Table.Cell class="text-right">
+						{
+								Object.values($warenkorb)
+										.map((entry) => entry.amount * entry.product.price)
+										.reduce((partial, v) => partial + v, 0) 
+						.toFixed(2)}€
+					</Table.Cell>
+				</Table.Row>
 			</Table.Body>
 		</Table.Root>
 
@@ -83,6 +98,3 @@
 		</div>
 	</aside>
 </div>
-
-<style>
-</style>

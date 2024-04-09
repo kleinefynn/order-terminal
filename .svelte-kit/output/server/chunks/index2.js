@@ -1,5 +1,5 @@
 import { k as set_current_component, r as run_all, l as current_component, c as create_ssr_component, a as compute_rest_props, b as spread, d as escape_object, e as escape_attribute_value, j as each, o as onDestroy, n as get_store_value, p as createEventDispatcher, f as add_attribute, v as validate_component, q as split_css_unit, t as identity } from "./ssr.js";
-import { i as is_void, c as cn, a as cubicOut } from "./utils.js";
+import { i as is_void, c as cn, a as cubicOut } from "./ProductService.js";
 import "dequal";
 import { nanoid } from "nanoid/non-secure";
 import { d as derived, w as writable, r as readable, a as readonly } from "./index.js";
@@ -77,7 +77,7 @@ function update($$) {
   }
 }
 /**
- * @license lucide-svelte v0.364.0 - ISC
+ * @license lucide-svelte v0.365.0 - ISC
  *
  * This source code is licensed under the ISC license.
  * See the LICENSE file in the root directory of this source tree.
