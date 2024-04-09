@@ -28,7 +28,7 @@
 						</Card.Description>
 					</Card.Header>
 					<Card.Content class="flex">
-						<p class="absolute bottom-4 font-sm text-sm">{fee.price.toFixed(2)}€</p>
+						<p class="absolute bottom-4 text-sm">{fee.price.toFixed(2)}€</p>
 					</Card.Content>
 				</Card.Root>
 			{/each}
