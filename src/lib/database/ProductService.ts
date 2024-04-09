@@ -18,7 +18,7 @@ class ProductService implements IProductService {
     versionUpgrades = ProductUpgradeStatements;
     loadToVersion = ProductUpgradeStatements[ProductUpgradeStatements.length-1].toVersion;
     db!: SQLiteDBConnection;
-    database: string = 'myproductdb';
+    database: string = 'mydb';
     platform = sqliteService.getPlatform();
     isInitCompleted = new BehaviorSubject(false);
 
@@ -46,7 +46,10 @@ class ProductService implements IProductService {
         }
     }
     async getProducts(): Promise<Product[]> {
-        return (await this.db.query('SELECT * FROM products;')).values as Product[];
+        return (await this.db.query('SELECT product_id as id, name, description, price, category FROM products;')).values as Product[];
+    }
+    async getProductsWithPurchases(): Promise<Product[]> {
+        return (await this.db.query('SELECT product_id as id, name, description, price, category FROM products NATURAL JOIN purchases;')).values as Product[];
     }
     async addProduct(Product: Omit<Product, 'id'>): Promise<number> {
         const sql = `INSERT INTO products (name, description, price, category) VALUES (?,?,?,?);`;
@@ -59,11 +62,11 @@ class ProductService implements IProductService {
         }
     }
     async updateProductById(id: number): Promise<void> {
-        const sql = `UPDATE products SET WHERE id=${id}`;
+        const sql = `UPDATE products SET WHERE product_id=${id}`;
         await this.db.run(sql);
     }
     async deleteProductById(id: number): Promise<void> {
-        const sql = `DELETE FROM products WHERE id=${id}`;
+        const sql = `DELETE FROM products WHERE product_id=${id}`;
         await this.db.run(sql);
     }
     getDatabaseName(): string {

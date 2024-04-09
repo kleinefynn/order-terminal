@@ -6,7 +6,6 @@
 	import Trash2 from 'lucide-svelte/icons/trash-2';
 	import * as AlertDialog from '$lib/components/ui/alert-dialog';
 	import warenkorb from './warenkorb.store';
-
 </script>
 
 <div class="flex flex-col gap-6 p-4 sm:px-6 sm:py-0 md:grid md:grid-cols-2 md:gap-8">
@@ -48,13 +47,25 @@
 									</AlertDialog.Header>
 									<AlertDialog.Footer>
 										<AlertDialog.Cancel>Zurück</AlertDialog.Cancel>
-										<AlertDialog.Action on:click={() => warenkorb.remove(korb.product.id)}>Löschen</AlertDialog.Action>
+										<AlertDialog.Action on:click={() => warenkorb.remove(korb.product.id)}
+											>Löschen</AlertDialog.Action
+										>
 									</AlertDialog.Footer>
 								</AlertDialog.Content>
 							</AlertDialog.Root>
 						</Table.Cell>
 						<Table.Cell class="font-medium">{korb.product.name}</Table.Cell>
-						<Table.Cell><Input type="number" min="1" class="w-16" value={korb.amount} on:change={(v) => {warenkorb.change(korb, v.currentTarget?.value);}} /></Table.Cell>
+						<Table.Cell
+							><Input
+								type="number"
+								min="1"
+								class="w-16"
+								value={korb.amount}
+								on:change={(v) => {
+									warenkorb.change(korb, v.currentTarget?.value);
+								}}
+							/></Table.Cell
+						>
 						<Table.Cell class="text-right">
 							<p>{(korb.product.price * korb.amount).toFixed(2)}€</p>
 							<p class="text-xs text-muted-foreground">{korb.product.price.toFixed(2)}€</p>
@@ -66,33 +77,49 @@
 					<Table.Cell>Summe</Table.Cell>
 					<Table.Cell></Table.Cell>
 					<Table.Cell class="text-right">
-						{
-								Object.values($warenkorb)
-										.map((entry) => entry.amount * entry.product.price)
-										.reduce((partial, v) => partial + v, 0) 
-						.toFixed(2)}€
+						{Object.values($warenkorb)
+							.map((entry) => entry.amount * entry.product.price)
+							.reduce((partial, v) => partial + v, 0)
+							.toFixed(2)}€
 					</Table.Cell>
 				</Table.Row>
 			</Table.Body>
 		</Table.Root>
 
 		<div class="mx-auto my-2 flex w-64 flex-col gap-2">
-			<Button class="w-full">Erfassen</Button>
-      <AlertDialog.Root>
-        <AlertDialog.Trigger
-          ><Button variant="secondary" class="w-full">Löschen</Button></AlertDialog.Trigger
-        >
-        <AlertDialog.Content>
-          <AlertDialog.Header>
-            <AlertDialog.Title>Löschen?</AlertDialog.Title>
-            <AlertDialog.Description>Aktion kann nicht rückgängig gemacht werden. Sind Sie sich sicher?</AlertDialog.Description>
-          </AlertDialog.Header>
-          <AlertDialog.Footer>
-            <AlertDialog.Cancel>Zurück</AlertDialog.Cancel>
-            <AlertDialog.Action on:click={() => warenkorb.reset()}>Löschen</AlertDialog.Action>
-          </AlertDialog.Footer>
-        </AlertDialog.Content>
-      </AlertDialog.Root>
+			<AlertDialog.Root>
+				<AlertDialog.Trigger
+					><Button class="w-full">Erfassen</Button></AlertDialog.Trigger
+				>
+				<AlertDialog.Content>
+					<AlertDialog.Header>
+						<AlertDialog.Title>Erfassen?</AlertDialog.Title>
+					</AlertDialog.Header>
+					<AlertDialog.Footer>
+						<AlertDialog.Cancel>Zurück</AlertDialog.Cancel>
+						<AlertDialog.Action on:click={() => warenkorb.purchase()}>Erfassen</AlertDialog.Action>
+					</AlertDialog.Footer>
+				</AlertDialog.Content>
+			</AlertDialog.Root>
+
+
+			<AlertDialog.Root>
+				<AlertDialog.Trigger
+					><Button variant="secondary" class="w-full">Löschen</Button></AlertDialog.Trigger
+				>
+				<AlertDialog.Content>
+					<AlertDialog.Header>
+						<AlertDialog.Title>Löschen?</AlertDialog.Title>
+						<AlertDialog.Description
+							>Aktion kann nicht rückgängig gemacht werden. Sind Sie sich sicher?</AlertDialog.Description
+						>
+					</AlertDialog.Header>
+					<AlertDialog.Footer>
+						<AlertDialog.Cancel>Zurück</AlertDialog.Cancel>
+						<AlertDialog.Action on:click={() => warenkorb.reset()}>Löschen</AlertDialog.Action>
+					</AlertDialog.Footer>
+				</AlertDialog.Content>
+			</AlertDialog.Root>
 		</div>
 	</aside>
 </div>

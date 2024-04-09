@@ -4,9 +4,9 @@ import { writable } from 'svelte/store';
 
 type Store = Map<string, Product[]>;
 
-let products = new Map<string, Product[]>();
+let products_map = new Map<string, Product[]>();
 
-const {subscribe, set, update} = writable(products);
+const {subscribe, set, update} = writable(products_map);
 
 const remove = async (category: string, id: number) => {
     try {
@@ -36,8 +36,7 @@ const add = async (product: Omit<Product, 'id'>) => {
 			return store;
         });
     } catch (e) {
-        console.error(e);
-        
+        console.error(e);   
     }
 }
 
@@ -83,7 +82,11 @@ let sample_products: Omit<Product, 'id'>[] = [
 
 productService.isInitCompleted.subscribe({
 	complete: async () => {
-		await init_store()
+		await init_store();
+		console.group('YO');
+		//console.table(await productService.getProducts()),
+		console.groupEnd();
+		
 	}
 });
 
@@ -98,7 +101,7 @@ async function init_store() {
 		products = await productService.getProducts();
 	}
 
-	const map = new Map<string, Product[]>();
+	const map = products_map;
 
 	for (const product of products) {
 		let list = map.get(product.category);
@@ -111,11 +114,14 @@ async function init_store() {
 		list.push(product);
 	}
 	
-	set(map);
+	set(products_map);
 }
+
+const get = () => Array.from(products_map.values())
 
 export default {
     subscribe,
     add,
     remove,
+	get,
 };

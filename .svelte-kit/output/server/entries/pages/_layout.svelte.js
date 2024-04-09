@@ -1,5 +1,5 @@
-import { c as create_ssr_component, v as validate_component, a as compute_rest_props, b as spread, e as escape_attribute_value, d as escape_object, f as add_attribute, s as setContext, g as getContext, h as subscribe } from "../../chunks/ssr.js";
-import { I as Icon, n as noop, i as isHTMLElement, t as toWritableStores, o as omit, a as overridable, g as generateIds, m as makeElement, e as executeCallbacks, b as addEventListener, c as addMeltEventListener, r as removeUndefined, s as styleToString, p as portalAttr, d as effect, f as createElHelpers, k as kbd, h as isTouch, j as tick, l as getPortalDestination, u as usePortal, q as isElement, v as isDocument, w as isBrowser, x as createBitAttrs, y as createDialog, z as removeUndefined$1, A as getOptionUpdater, B as createDispatcher, C as fade, D as fly, E as Button } from "../../chunks/index2.js";
+import { c as create_ssr_component, v as validate_component, a as compute_rest_props, b as spread, e as escape_attribute_value, d as escape_object, f as add_attribute, s as setContext, g as getContext, h as subscribe, i as escape } from "../../chunks/ssr.js";
+import { I as Icon, n as noop, i as isHTMLElement, t as toWritableStores, o as omit, a as overridable, g as generateIds, m as makeElement, e as executeCallbacks, b as addEventListener, c as addMeltEventListener, r as removeUndefined, s as styleToString, p as portalAttr, d as effect, f as createElHelpers, k as kbd, h as isTouch, j as tick, l as getPortalDestination, u as usePortal, q as isElement, v as isDocument, w as isBrowser, x as createBitAttrs, y as createDialog, z as removeUndefined$1, A as getOptionUpdater, B as createDispatcher, C as fade, D as fly, E as purchaseRecordService, F as Button } from "../../chunks/PurchaseRecordsService.js";
 import "clsx";
 import { c as cn, f as flyAndScale, s as sqliteService, p as productService, i as is_void } from "../../chunks/ProductService.js";
 import "dequal";
@@ -9,7 +9,6 @@ import { flip, offset, shift, arrow, size, autoUpdate, computePosition } from "@
 import { p as page } from "../../chunks/stores.js";
 import { Capacitor } from "@capacitor/core";
 import { applyPolyfills, defineCustomElements } from "jeep-sqlite/loader/index.js";
-import { lastValueFrom } from "rxjs";
 const Home = create_ssr_component(($$result, $$props, $$bindings, slots) => {
   const iconNode = [
     [
@@ -1408,9 +1407,9 @@ let AppInitializer$1 = class AppInitializer {
   async initialize() {
     await this.setupPlugin();
     if (this.platform === "web") {
-      await new Promise((r) => setTimeout(r, 100));
+      await new Promise((r) => setTimeout(r, 500));
     }
-    await this.setupProductDatabase();
+    await this.setupDatabase();
   }
   async setupPlugin() {
     console.log("Setting up plugins...");
@@ -1424,14 +1423,18 @@ let AppInitializer$1 = class AppInitializer {
       throw new Error(`AppInitializer setupPlugin: ${msg}`);
     }
   }
-  async setupProductDatabase() {
+  async setupDatabase() {
     try {
-      let v = lastValueFrom(productService.isInitCompleted);
       await productService.initializeDatabase();
+      await purchaseRecordService.initializeDatabase();
       if (this.platform === "web") {
-        await sqliteService.saveToStore(productService.getDatabaseName());
+        await sqliteService.saveToStore("mydb");
       }
-      await v;
+      const tables = await Promise.all([
+        purchaseRecordService.db.getTableList(),
+        productService.db.getTableList()
+      ]);
+      console.log(tables);
       return;
     } catch (err) {
       const msg = err.message ? err.message : err;
@@ -1526,24 +1529,34 @@ const Triangle_alert = create_ssr_component(($$result, $$props, $$bindings, slot
 const TriangleAlert = Triangle_alert;
 const AppInitializer2 = create_ssr_component(($$result, $$props, $$bindings, slots) => {
   let isError = false;
+  let errorMessage = "";
   appInitializer.initialize().then(() => {
   }).catch((e) => {
     isError = true;
+    errorMessage = e;
     console.error(e);
   });
-  return `${isError ? `${validate_component(Alert, "Alert.Root").$$render($$result, { variant: "destructive" }, {}, {
-    default: () => {
-      return `${validate_component(TriangleAlert, "TriangleAlert").$$render($$result, { class: "h-4 w-4" }, {}, {})} ${validate_component(Alert_title, "Alert.Title").$$render($$result, {}, {}, {
-        default: () => {
-          return `Error`;
-        }
-      })} ${validate_component(Alert_description, "Alert.Description").$$render($$result, {}, {}, {
-        default: () => {
-          return `Your session has expired. Please login again.`;
-        }
-      })}`;
+  return `${isError ? `${validate_component(Alert, "Alert.Root").$$render(
+    $$result,
+    {
+      variant: "destructive",
+      class: "mx-auto my-4 w-1/2"
+    },
+    {},
+    {
+      default: () => {
+        return `${validate_component(TriangleAlert, "TriangleAlert").$$render($$result, { class: "h-4 w-4" }, {}, {})} ${validate_component(Alert_title, "Alert.Title").$$render($$result, {}, {}, {
+          default: () => {
+            return `Error`;
+          }
+        })} ${validate_component(Alert_description, "Alert.Description").$$render($$result, {}, {}, {
+          default: () => {
+            return `${escape(errorMessage)}`;
+          }
+        })}`;
+      }
     }
-  })}` : ``}`;
+  )}` : ``}`;
 });
 const Layout = create_ssr_component(($$result, $$props, $$bindings, slots) => {
   let $page, $$unsubscribe_page;
@@ -1564,7 +1577,7 @@ const Layout = create_ssr_component(($$result, $$props, $$bindings, slots) => {
     }
   }
   $$unsubscribe_page();
-  return `${validate_component(AppInitializer2, "AppInitializer").$$render($$result, {}, {}, {})} <div class="flex min-h-screen w-full flex-col bg-muted/40"><aside class="fixed inset-y-0 left-0 z-10 hidden w-14 flex-col border-r bg-background sm:flex"><nav class="flex flex-col items-center gap-4 px-2 py-4">${validate_component(Root, "Tooltip.Root").$$render($$result, {}, {}, {
+  return `<div class="flex min-h-screen w-full flex-col bg-muted/40"><aside class="fixed inset-y-0 left-0 z-10 hidden w-14 flex-col border-r bg-background sm:flex"><nav class="flex flex-col items-center gap-4 px-2 py-4">${validate_component(Root, "Tooltip.Root").$$render($$result, {}, {}, {
     default: () => {
       return `${validate_component(Trigger, "Tooltip.Trigger").$$render($$result, { asChild: true }, {}, {
         default: ({ builder }) => {
@@ -1737,7 +1750,7 @@ const Layout = create_ssr_component(($$result, $$props, $$bindings, slots) => {
         }
       })}`;
     }
-  })}</header> <main>${slots.default ? slots.default({}) : ``}</main></div></div>`;
+  })}</header> <main>${validate_component(AppInitializer2, "AppInitializer").$$render($$result, {}, {}, {})} ${slots.default ? slots.default({}) : ``}</main></div></div>`;
 });
 export {
   Layout as default

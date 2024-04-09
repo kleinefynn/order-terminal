@@ -1,6 +1,7 @@
 import { lastValueFrom } from 'rxjs';
 import { productService } from './ProductService';
 import { sqliteService } from './SQLiteService';
+import { purchaseRecordService } from './PurchaseRecordsService';
 
 class AppInitializer {
     platform: string = sqliteService.getPlatform();
@@ -11,6 +12,7 @@ class AppInitializer {
             await new Promise(r => setTimeout(r, 500));
         }
         await this.setupProductDatabase();
+        await this.setupPurchaseDatabase();
 
     }
 
@@ -30,19 +32,28 @@ class AppInitializer {
 
     private async setupProductDatabase() {
         try {
-            // wait for database to be ready.
-            let v = lastValueFrom(productService.isInitCompleted);
             await productService.initializeDatabase();
             if (this.platform === 'web') {
                 await sqliteService.saveToStore(productService.getDatabaseName());
             }
-            await v;
             return;
         } catch(err) {
             const msg = (err as Error).message ? (err as Error).message : err;
             throw new Error(`AppInitializer setupUserDatabase: ${msg}`);        
         }
+    }
 
+    private async setupPurchaseDatabase() {
+        try {
+            await purchaseRecordService.initializeDatabase();
+            if (this.platform === 'web') {
+                await sqliteService.saveToStore(purchaseRecordService.getDatabaseName());
+            }
+            return;
+        } catch(err) {
+            const msg = (err as Error).message ? (err as Error).message : err;
+            throw new Error(`AppInitializer setupPurchaseDatabase: ${msg}`);        
+        }
     }
 }
 

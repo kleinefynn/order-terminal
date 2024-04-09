@@ -180,7 +180,7 @@ class ProductService {
   versionUpgrades = ProductUpgradeStatements;
   loadToVersion = ProductUpgradeStatements[ProductUpgradeStatements.length - 1].toVersion;
   db;
-  database = "myproductdb";
+  database = "mydb";
   platform = sqliteService.getPlatform();
   isInitCompleted = new BehaviorSubject(false);
   async initializeDatabase() {
@@ -235,6 +235,7 @@ const productService = new ProductService();
 export {
   cubicOut as a,
   cn as c,
+  dbVersionService as d,
   flyAndScale as f,
   is_void as i,
   productService as p,

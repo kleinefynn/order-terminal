@@ -12,6 +12,15 @@
     "file": "chunks/ProductService.js",
     "name": "ProductService"
   },
+  "_PurchaseRecordsService.js": {
+    "file": "chunks/PurchaseRecordsService.js",
+    "name": "PurchaseRecordsService",
+    "imports": [
+      "_ssr.js",
+      "_ProductService.js",
+      "_index.js"
+    ]
+  },
   "_exports.js": {
     "file": "chunks/exports.js",
     "name": "exports"
@@ -21,15 +30,6 @@
     "name": "index",
     "imports": [
       "_ssr.js"
-    ]
-  },
-  "_index2.js": {
-    "file": "chunks/index2.js",
-    "name": "index",
-    "imports": [
-      "_ssr.js",
-      "_ProductService.js",
-      "_index.js"
     ]
   },
   "_internal.js": {
@@ -87,13 +87,13 @@
     "isEntry": true,
     "imports": [
       "_ssr.js",
-      "_index2.js",
+      "_PurchaseRecordsService.js",
       "_ProductService.js",
       "_index.js",
       "_stores.js"
     ],
     "css": [
-      "_app/immutable/assets/_layout.B8K4M2C9.css"
+      "_app/immutable/assets/_layout.WPU6NiiR.css"
     ]
   },
   "src/routes/+layout.ts": {
@@ -136,7 +136,7 @@
     "isEntry": true,
     "imports": [
       "_ssr.js",
-      "_index2.js",
+      "_PurchaseRecordsService.js",
       "_ProductService.js",
       "_index.js",
       "_products.store.js"

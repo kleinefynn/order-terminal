@@ -1,11 +1,13 @@
 import { k as set_current_component, r as run_all, l as current_component, c as create_ssr_component, a as compute_rest_props, b as spread, d as escape_object, e as escape_attribute_value, j as each, o as onDestroy, n as get_store_value, p as createEventDispatcher, f as add_attribute, v as validate_component, q as split_css_unit, t as identity } from "./ssr.js";
-import { i as is_void, c as cn, a as cubicOut } from "./ProductService.js";
+import { i as is_void, c as cn, a as cubicOut, s as sqliteService, d as dbVersionService } from "./ProductService.js";
 import "dequal";
 import { nanoid } from "nanoid/non-secure";
 import { d as derived, w as writable, r as readable, a as readonly } from "./index.js";
 import { createFocusTrap as createFocusTrap$1 } from "focus-trap";
 import { tv } from "tailwind-variants";
 import "clsx";
+import "@capacitor-community/sqlite";
+import { BehaviorSubject } from "rxjs";
 const dirty_components = [];
 const binding_callbacks = [];
 let render_callbacks = [];
@@ -1400,13 +1402,98 @@ function fly(node, { delay = 0, duration = 400, easing = cubicOut, x = 0, y = 0,
 			opacity: ${target_opacity - od * u}`
   };
 }
+const PurchasesUpgradeStatements = [
+  {
+    toVersion: 1,
+    statements: [
+      `CREATE TABLE IF NOT EXISTS purchase_record (
+            purchase_id INTEGER PRIMARY KEY AUTOINCREMENT,
+            time TEXT NOT NULL
+        );`,
+      `CREATE TABLE IF NOT EXISTS purchases (
+            purchase_id INTEGER,
+            product_id INTEGER,
+            amount INTEGER NOT NULL,
+            PRIMARY KEY(purchase_id,product_id)
+        );`
+    ]
+  }
+];
+class PurchaseRecordService {
+  versionUpgrades = PurchasesUpgradeStatements;
+  loadToVersion = PurchasesUpgradeStatements[PurchasesUpgradeStatements.length - 1].toVersion;
+  db;
+  database = "mydb";
+  platform = sqliteService.getPlatform();
+  isInitCompleted = new BehaviorSubject(false);
+  async initializeDatabase() {
+    try {
+      await sqliteService.addUpgradeStatement({
+        database: this.database,
+        upgrade: this.versionUpgrades
+      });
+      this.db = await sqliteService.openDatabase(this.database, this.loadToVersion, false);
+      dbVersionService.setDbVersion(this.database, this.loadToVersion);
+      if (this.platform === "web") {
+        await sqliteService.saveToStore(this.database);
+      }
+      this.isInitCompleted.next(true);
+      this.isInitCompleted.complete();
+    } catch (err) {
+      const msg = err.message ? err.message : err;
+      throw new Error(`PurchaseRecordService.initializeDatabase: ${msg}`);
+    }
+  }
+  async getPurchaseRecords() {
+    return (await this.db.query(
+      `SELECT * FROM purchase_records 
+            INNER JOIN purchased_products ON purchase_records.id = purchased_products.purchase_id
+            INNER JOIN products ON purchased_products.product_id = products.id;`
+    )).values;
+  }
+  async addPurchaseRecord(record) {
+    const sql = `INSERT INTO purchase_records (time) VALUES (?);`;
+    const res = await this.db.run(sql, [record.time]);
+    if (res.changes !== void 0 && res.changes.lastId !== void 0 && res.changes.lastId > 0)
+      ;
+    else {
+      throw new Error(`storageService.addPurchaseRecord: lastId not returned`);
+    }
+    const purchase_id = (await this.db.query("SELECT id FROM purchase_records;")).values;
+    for (const product of record.products) {
+      const sql2 = `INSERT INTO purchase_records (purchase_id, product_id, amount) VALUES (?, ?, ?);`;
+      const res2 = await this.db.run(sql2, [purchase_id, product.product.id, product.amount]);
+      if (res2.changes !== void 0 && res2.changes.lastId !== void 0 && res2.changes.lastId > 0)
+        ;
+      else {
+        throw new Error(`storageService.addPurchaseRecord: lastId not returned`);
+      }
+    }
+  }
+  async updatePurchaseRecordById(id) {
+    const sql = `UPDATE purchase_records SET WHERE id=${id}`;
+    await this.db.run(sql);
+  }
+  async deletePurchaseRecordById(id) {
+    const sql = `DELETE FROM purchase_records WHERE id=${id}`;
+    await this.db.run(sql);
+  }
+  getDatabaseName() {
+    return this.database;
+  }
+  getDatabaseVersion() {
+    return this.loadToVersion;
+  }
+}
+const purchaseRecordService = new PurchaseRecordService();
 export {
   getOptionUpdater as A,
   createDispatcher as B,
   fade as C,
   fly as D,
-  Button as E,
-  buttonVariants as F,
+  purchaseRecordService as E,
+  Button as F,
+  buttonVariants as G,
   Icon$1 as I,
   overridable as a,
   addEventListener as b,

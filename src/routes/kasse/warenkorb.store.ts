@@ -1,9 +1,11 @@
 import { writable } from 'svelte/store';
-import type { ShoppingCart } from './Item';
+import type { ShoppingCartItem } from './Item';
 import '../products.store';
 import type { Product } from '$lib/database/models/Product';
+import { purchaseRecordService } from '$lib/database/PurchaseRecordsService';
+import { productService } from '$lib/database/ProductService';
 
-type Warenkorb = { [id: string] : ShoppingCart; };
+type Warenkorb = { [id: string] : ShoppingCartItem; };
 
 let items: Warenkorb = {};
 
@@ -11,7 +13,7 @@ let items: Warenkorb = {};
 const {subscribe, set, update} = writable(items);
 
 const addItem = (item: Product) => {
-    let cart_item: ShoppingCart | undefined = items[item.id];
+    let cart_item: ShoppingCartItem | undefined = items[item.id];
 
     update((items: Warenkorb) => {
         cart_item === undefined ?
@@ -23,8 +25,8 @@ const addItem = (item: Product) => {
 }
 
 
-const change = (item: ShoppingCart, amount: string | number | null) => {
-    let cart_item: ShoppingCart | undefined = items[item.product.id];
+const change = (item: ShoppingCartItem, amount: string | number | null) => {
+    let cart_item: ShoppingCartItem | undefined = items[item.product.id];
     
 
     if (cart_item === undefined) {
@@ -51,11 +53,30 @@ const reset = () => {
     set(items);
 };
     
+const purchase = async () => {
+    let products: ShoppingCartItem[] = Object.values(items);
+
+    if (products.length === 0) {
+        return;
+    }
+
+    await purchaseRecordService.addPurchaseRecord({
+        time: new Date().toISOString(),
+        products: products,
+        price: 3,
+        amount: 1,
+    });
+
+    await purchaseRecordService.getPurchaseRecords();
+    reset();
+
+}
 
 export default {
     subscribe,
     addItem,
     change,
     remove,
-    reset
+    reset,
+    purchase
 };

@@ -2,6 +2,8 @@ import { c as create_ssr_component, a as compute_rest_props, b as spread, e as e
 import { c as cn, i as is_void } from "../../../chunks/ProductService.js";
 import "clsx";
 import { p as products } from "../../../chunks/products.store.js";
+import "@capacitor-community/sqlite";
+import "@capacitor/core";
 const Card = create_ssr_component(($$result, $$props, $$bindings, slots) => {
   let $$restProps = compute_rest_props($$props, ["class"]);
   let { class: className = void 0 } = $$props;
@@ -103,17 +105,17 @@ const Page = create_ssr_component(($$result, $$props, $$bindings, slots) => {
               default: () => {
                 return `${validate_component(Card_title, "Card.Title").$$render($$result, {}, {}, {
                   default: () => {
-                    return `<div class="flex w-32 justify-between"><p class="">${escape(fee.name)}</p></div> `;
+                    return `<div class="flex w-32 justify-between select-none"><p class="">${escape(fee.name)}</p></div> `;
                   }
                 })} ${validate_component(Card_description, "Card.Description").$$render($$result, {}, {}, {
                   default: () => {
-                    return `<p class="">${escape(fee.description ?? "")}</p> `;
+                    return `<p class="select-none">${escape(fee.description ?? "")}</p> `;
                   }
                 })} `;
               }
             })} ${validate_component(Card_content, "Card.Content").$$render($$result, { class: "flex" }, {}, {
               default: () => {
-                return `<p class="absolute bottom-4 text-sm">${escape(fee.price.toFixed(2))}€</p> `;
+                return `<p class="absolute bottom-4 text-sm select-none">${escape(fee.price.toFixed(2))}€</p> `;
               }
             })} `;
           }

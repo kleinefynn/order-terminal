@@ -1,5 +1,5 @@
 import { s as setContext, g as getContext, c as create_ssr_component, h as subscribe$1, a as compute_rest_props, b as spread, d as escape_object, f as add_attribute, e as escape_attribute_value, v as validate_component, j as each, i as escape } from "../../../chunks/ssr.js";
-import { t as toWritableStores, m as makeElement, x as createBitAttrs, y as createDialog, z as removeUndefined, A as getOptionUpdater, B as createDispatcher, I as Icon, F as buttonVariants, C as fade, E as Button } from "../../../chunks/index2.js";
+import { t as toWritableStores, m as makeElement, x as createBitAttrs, y as createDialog, z as removeUndefined, A as getOptionUpdater, B as createDispatcher, I as Icon, G as buttonVariants, C as fade, E as purchaseRecordService, F as Button } from "../../../chunks/PurchaseRecordsService.js";
 import { i as is_void, c as cn, f as flyAndScale } from "../../../chunks/ProductService.js";
 import "dequal";
 import "clsx";
@@ -855,12 +855,20 @@ const reset = () => {
   items = {};
   set(items);
 };
+const purchase = async () => {
+  let products = Object.values(items);
+  await purchaseRecordService.addPurchaseRecord({
+    time: (/* @__PURE__ */ new Date()).toISOString(),
+    products: [...products]
+  });
+};
 const warenkorb = {
   subscribe,
   addItem,
   change,
   remove,
-  reset
+  reset,
+  purchase
 };
 const Layout = create_ssr_component(($$result, $$props, $$bindings, slots) => {
   let $warenkorb, $$unsubscribe_warenkorb;
@@ -985,9 +993,41 @@ const Layout = create_ssr_component(($$result, $$props, $$bindings, slots) => {
         }
       })}`;
     }
-  })} <div class="mx-auto my-2 flex w-64 flex-col gap-2">${validate_component(Button, "Button").$$render($$result, { class: "w-full" }, {}, {
+  })} <div class="mx-auto my-2 flex w-64 flex-col gap-2">${validate_component(Root, "AlertDialog.Root").$$render($$result, {}, {}, {
     default: () => {
-      return `Erfassen`;
+      return `${validate_component(Trigger, "AlertDialog.Trigger").$$render($$result, {}, {}, {
+        default: () => {
+          return `${validate_component(Button, "Button").$$render($$result, { class: "w-full" }, {}, {
+            default: () => {
+              return `Erfassen`;
+            }
+          })}`;
+        }
+      })} ${validate_component(Alert_dialog_content, "AlertDialog.Content").$$render($$result, {}, {}, {
+        default: () => {
+          return `${validate_component(Alert_dialog_header, "AlertDialog.Header").$$render($$result, {}, {}, {
+            default: () => {
+              return `${validate_component(Alert_dialog_title, "AlertDialog.Title").$$render($$result, {}, {}, {
+                default: () => {
+                  return `Erfassen?`;
+                }
+              })}`;
+            }
+          })} ${validate_component(Alert_dialog_footer, "AlertDialog.Footer").$$render($$result, {}, {}, {
+            default: () => {
+              return `${validate_component(Alert_dialog_cancel, "AlertDialog.Cancel").$$render($$result, {}, {}, {
+                default: () => {
+                  return `Zurück`;
+                }
+              })} ${validate_component(Alert_dialog_action, "AlertDialog.Action").$$render($$result, {}, {}, {
+                default: () => {
+                  return `Erfassen`;
+                }
+              })}`;
+            }
+          })}`;
+        }
+      })}`;
     }
   })} ${validate_component(Root, "AlertDialog.Root").$$render($$result, {}, {}, {
     default: () => {

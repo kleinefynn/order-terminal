@@ -1,6 +1,6 @@
 {
   ".svelte-kit/generated/client-optimized/app.js": {
-    "file": "_app/immutable/entry/app.Bbtf-wBP.js",
+    "file": "_app/immutable/entry/app.B9HetlmH.js",
     "name": "entry/app",
     "src": ".svelte-kit/generated/client-optimized/app.js",
     "isEntry": true,
@@ -21,7 +21,7 @@
     ]
   },
   ".svelte-kit/generated/client-optimized/nodes/0.js": {
-    "file": "_app/immutable/nodes/0.CBlfSpvY.js",
+    "file": "_app/immutable/nodes/0.DbN01cTj.js",
     "name": "nodes/0",
     "src": ".svelte-kit/generated/client-optimized/nodes/0.js",
     "isEntry": true,
@@ -29,10 +29,10 @@
     "imports": [
       "_scheduler.BjA4TFnn.js",
       "_index.C0Qvp063.js",
-      "_ProductService.WXLRHO_8.js",
-      "_index.D0_wMLE0.js",
+      "_PurchaseRecordsService.Dm-puWxV.js",
+      "_index.By-SuiOu.js",
       "_index.Bl2S_yjH.js",
-      "_stores.Dxxz--HR.js",
+      "_stores.COJgzCdI.js",
       "_preload-helper.D6kgxu3v.js"
     ],
     "dynamicImports": [
@@ -40,11 +40,11 @@
       "_core-js.BMcFR_Xg.js"
     ],
     "css": [
-      "_app/immutable/assets/0.CXgFg_vY.css"
+      "_app/immutable/assets/0.CCqF5ecb.css"
     ]
   },
   ".svelte-kit/generated/client-optimized/nodes/1.js": {
-    "file": "_app/immutable/nodes/1.CoMz-FQR.js",
+    "file": "_app/immutable/nodes/1.BaV_Bq1B.js",
     "name": "nodes/1",
     "src": ".svelte-kit/generated/client-optimized/nodes/1.js",
     "isEntry": true,
@@ -52,11 +52,11 @@
     "imports": [
       "_scheduler.BjA4TFnn.js",
       "_index.C0Qvp063.js",
-      "_stores.Dxxz--HR.js"
+      "_stores.COJgzCdI.js"
     ]
   },
   ".svelte-kit/generated/client-optimized/nodes/2.js": {
-    "file": "_app/immutable/nodes/2.bRCBmm5J.js",
+    "file": "_app/immutable/nodes/2.4ZO3L4OK.js",
     "name": "nodes/2",
     "src": ".svelte-kit/generated/client-optimized/nodes/2.js",
     "isEntry": true,
@@ -64,10 +64,10 @@
     "imports": [
       "_scheduler.BjA4TFnn.js",
       "_index.C0Qvp063.js",
-      "_ProductService.WXLRHO_8.js",
-      "_index.D0_wMLE0.js",
+      "_PurchaseRecordsService.Dm-puWxV.js",
+      "_index.By-SuiOu.js",
       "_index.Bl2S_yjH.js",
-      "_warenkorb.store.BDDdmSAI.js"
+      "_warenkorb.store.C1K-x2w5.js"
     ]
   },
   ".svelte-kit/generated/client-optimized/nodes/3.js": {
@@ -104,7 +104,7 @@
     ]
   },
   ".svelte-kit/generated/client-optimized/nodes/6.js": {
-    "file": "_app/immutable/nodes/6.CAlDjSfa.js",
+    "file": "_app/immutable/nodes/6.Bsg0kmr3.js",
     "name": "nodes/6",
     "src": ".svelte-kit/generated/client-optimized/nodes/6.js",
     "isEntry": true,
@@ -112,8 +112,8 @@
     "imports": [
       "_scheduler.BjA4TFnn.js",
       "_index.C0Qvp063.js",
-      "_ProductService.WXLRHO_8.js",
-      "_warenkorb.store.BDDdmSAI.js"
+      "_PurchaseRecordsService.Dm-puWxV.js",
+      "_warenkorb.store.C1K-x2w5.js"
     ]
   },
   ".svelte-kit/generated/client-optimized/nodes/7.js": {
@@ -127,9 +127,9 @@
       "_index.C0Qvp063.js"
     ]
   },
-  "_ProductService.WXLRHO_8.js": {
-    "file": "_app/immutable/chunks/ProductService.WXLRHO_8.js",
-    "name": "ProductService",
+  "_PurchaseRecordsService.Dm-puWxV.js": {
+    "file": "_app/immutable/chunks/PurchaseRecordsService.Dm-puWxV.js",
+    "name": "PurchaseRecordsService",
     "imports": [
       "_index.C0Qvp063.js",
       "_scheduler.BjA4TFnn.js",
@@ -144,8 +144,8 @@
     "name": "core-js",
     "isDynamicEntry": true
   },
-  "_entry.BERKCXnn.js": {
-    "file": "_app/immutable/chunks/entry.BERKCXnn.js",
+  "_entry.DLX5nxYs.js": {
+    "file": "_app/immutable/chunks/entry.DLX5nxYs.js",
     "name": "entry",
     "imports": [
       "_scheduler.BjA4TFnn.js",
@@ -159,21 +159,21 @@
       "_scheduler.BjA4TFnn.js"
     ]
   },
+  "_index.By-SuiOu.js": {
+    "file": "_app/immutable/chunks/index.By-SuiOu.js",
+    "name": "index",
+    "imports": [
+      "_scheduler.BjA4TFnn.js",
+      "_index.C0Qvp063.js",
+      "_PurchaseRecordsService.Dm-puWxV.js",
+      "_index.Bl2S_yjH.js"
+    ]
+  },
   "_index.C0Qvp063.js": {
     "file": "_app/immutable/chunks/index.C0Qvp063.js",
     "name": "index",
     "imports": [
       "_scheduler.BjA4TFnn.js"
-    ]
-  },
-  "_index.D0_wMLE0.js": {
-    "file": "_app/immutable/chunks/index.D0_wMLE0.js",
-    "name": "index",
-    "imports": [
-      "_scheduler.BjA4TFnn.js",
-      "_index.C0Qvp063.js",
-      "_ProductService.WXLRHO_8.js",
-      "_index.Bl2S_yjH.js"
     ]
   },
   "_preload-helper.D6kgxu3v.js": {
@@ -184,37 +184,37 @@
     "file": "_app/immutable/chunks/scheduler.BjA4TFnn.js",
     "name": "scheduler"
   },
-  "_stores.Dxxz--HR.js": {
-    "file": "_app/immutable/chunks/stores.Dxxz--HR.js",
+  "_stores.COJgzCdI.js": {
+    "file": "_app/immutable/chunks/stores.COJgzCdI.js",
     "name": "stores",
     "imports": [
-      "_entry.BERKCXnn.js"
+      "_entry.DLX5nxYs.js"
     ]
   },
-  "_warenkorb.store.BDDdmSAI.js": {
-    "file": "_app/immutable/chunks/warenkorb.store.BDDdmSAI.js",
+  "_warenkorb.store.C1K-x2w5.js": {
+    "file": "_app/immutable/chunks/warenkorb.store.C1K-x2w5.js",
     "name": "warenkorb.store",
     "imports": [
       "_index.Bl2S_yjH.js",
-      "_ProductService.WXLRHO_8.js"
+      "_PurchaseRecordsService.Dm-puWxV.js"
     ]
   },
   "node_modules/@capacitor-community/sqlite/dist/esm/web.js": {
-    "file": "_app/immutable/chunks/web.CkDAOkS4.js",
+    "file": "_app/immutable/chunks/web.CifArbJM.js",
     "name": "web",
     "src": "node_modules/@capacitor-community/sqlite/dist/esm/web.js",
     "isDynamicEntry": true,
     "imports": [
-      "_ProductService.WXLRHO_8.js"
+      "_PurchaseRecordsService.Dm-puWxV.js"
     ]
   },
   "node_modules/@sveltejs/kit/src/runtime/client/entry.js": {
-    "file": "_app/immutable/entry/start.BTcm3IRG.js",
+    "file": "_app/immutable/entry/start.CISDnWLu.js",
     "name": "entry/start",
     "src": "node_modules/@sveltejs/kit/src/runtime/client/entry.js",
     "isEntry": true,
     "imports": [
-      "_entry.BERKCXnn.js"
+      "_entry.DLX5nxYs.js"
     ]
   },
   "node_modules/jeep-sqlite/dist/esm/polyfills/dom.js": {
