@@ -1,6 +1,8 @@
 import { writable } from 'svelte/store';
 import type { ShoppingCartItem } from './Item';
 import '../products.store';
+import '../purchases.store';
+import * as purchaseStore from '../purchases.store';
 import type { Product } from '$lib/database/models/Product';
 import { purchaseRecordService } from '$lib/database/PurchaseRecordsService';
 import type { PurchaseWithoutId } from '$lib/database/models/PurchaseRecord';
@@ -70,8 +72,7 @@ const purchase = async () => {
         purchases: products,
     });
 
-    let purchases = await purchaseRecordService.getPurchaseRecords();
-    console.log(purchases);
+    await purchaseStore.default.refresh();
     
     reset();
 

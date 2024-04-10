@@ -1,7 +1,7 @@
 import { p as productService } from "./ProductService.js";
 import { w as writable } from "./index.js";
-let products = /* @__PURE__ */ new Map();
-const { subscribe, set, update } = writable(products);
+let products_map = /* @__PURE__ */ new Map();
+const { subscribe, set, update } = writable(products_map);
 const remove = async (category, id) => {
   try {
     await productService.deleteProductById(id);
@@ -79,7 +79,7 @@ async function init_store() {
     }
     products2 = await productService.getProducts();
   }
-  const map = /* @__PURE__ */ new Map();
+  const map = products_map;
   for (const product of products2) {
     let list = map.get(product.category);
     if (list === void 0) {
@@ -88,13 +88,15 @@ async function init_store() {
     }
     list.push(product);
   }
-  set(map);
+  set(products_map);
 }
-const products$1 = {
+const get = () => Array.from(products_map.values());
+const products = {
   subscribe,
   add,
-  remove
+  remove,
+  get
 };
 export {
-  products$1 as p
+  products as p
 };

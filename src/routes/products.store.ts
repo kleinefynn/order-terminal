@@ -83,10 +83,6 @@ let sample_products: Omit<Product, 'id'>[] = [
 productService.isInitCompleted.subscribe({
 	complete: async () => {
 		await init_store();
-		console.group('YO');
-		//console.table(await productService.getProducts()),
-		console.groupEnd();
-		
 	}
 });
 

@@ -1,7 +1,7 @@
 import { clsx } from "clsx";
 import { twMerge } from "tailwind-merge";
-import { CapacitorSQLite, SQLiteConnection } from "@capacitor-community/sqlite";
-import { Capacitor } from "@capacitor/core";
+import "@capacitor-community/sqlite";
+import { s as sqliteService, d as dbVersionService } from "./PurchaseRecordsService.js";
 import { BehaviorSubject } from "rxjs";
 const void_element_names = /^(?:area|base|br|col|command|embed|hr|img|input|keygen|link|meta|param|source|track|wbr)$/;
 function is_void(name) {
@@ -46,124 +46,17 @@ const flyAndScale = (node, params = { y: -8, x: 0, start: 0.95, duration: 150 })
     easing: cubicOut
   };
 };
-class SQLiteService {
-  // Your service implementation goes here
-  platform = Capacitor.getPlatform();
-  sqlitePlugin = CapacitorSQLite;
-  sqliteConnection = new SQLiteConnection(CapacitorSQLite);
-  dbNameVersionDict = /* @__PURE__ */ new Map();
-  getPlatform() {
-    return this.platform;
-  }
-  async initWebStore() {
-    try {
-      await this.sqliteConnection.initWebStore();
-    } catch (err) {
-      const msg = err.message ? err.message : err;
-      throw new Error(`sqliteService.initWebStore: ${msg}`);
-    }
-    return;
-  }
-  async addUpgradeStatement(options) {
-    try {
-      await this.sqlitePlugin.addUpgradeStatement(options);
-    } catch (err) {
-      const msg = err.message ? err.message : err;
-      throw new Error(`sqliteService.addUpgradeStatement: ${msg}`);
-    }
-    return;
-  }
-  async openDatabase(dbName, loadToVersion, readOnly) {
-    this.dbNameVersionDict.set(dbName, loadToVersion);
-    const encrypted = false;
-    const mode = "no-encryption";
-    try {
-      let db;
-      const retCC = (await this.sqliteConnection.checkConnectionsConsistency()).result;
-      const isConn = (await this.sqliteConnection.isConnection(dbName, readOnly)).result;
-      if (retCC && isConn) {
-        db = await this.sqliteConnection.retrieveConnection(dbName, readOnly);
-      } else {
-        db = await this.sqliteConnection.createConnection(dbName, encrypted, mode, loadToVersion, readOnly);
-      }
-      await db.open();
-      const res = (await db.isDBOpen()).result;
-      if (!res) {
-        throw new Error("sqliteService.openDatabase: ddb not opened");
-      }
-      return db;
-    } catch (err) {
-      const msg = err.message ? err.message : err;
-      throw new Error(`sqliteService.openDatabase: ${msg}`);
-    }
-  }
-  async isConnection(dbName, readOnly) {
-    try {
-      const isConn = (await this.sqliteConnection.isConnection(dbName, readOnly)).result;
-      if (isConn != void 0) {
-        return isConn;
-      } else {
-        throw new Error(`sqliteService.isConnection undefined`);
-      }
-    } catch (err) {
-      const msg = err.message ? err.message : err;
-      throw new Error(`sqliteService.isConnection: ${msg}`);
-    }
-  }
-  async closeDatabase(dbName, readOnly) {
-    try {
-      const isConn = (await this.sqliteConnection.isConnection(dbName, readOnly)).result;
-      if (isConn) {
-        await this.sqliteConnection.closeConnection(dbName, readOnly);
-      }
-      return;
-    } catch (err) {
-      const msg = err.message ? err.message : err;
-      throw new Error(`sqliteService.closeDatabase: ${msg}`);
-    }
-  }
-  async saveToStore(dbName) {
-    try {
-      await this.sqliteConnection.saveToStore(dbName);
-      return;
-    } catch (err) {
-      const msg = err.message ? err.message : err;
-      throw new Error(`sqliteService.saveToStore: ${msg}`);
-    }
-  }
-  async saveToLocalDisk(dbName) {
-    try {
-      await this.sqliteConnection.saveToLocalDisk(dbName);
-      return;
-    } catch (err) {
-      const msg = err.message ? err.message : err;
-      throw new Error(`sqliteService.saveToLocalDisk: ${msg}`);
-    }
-  }
-}
-const sqliteService = new SQLiteService();
-class DbVersionService {
-  dbNameVersionDict = /* @__PURE__ */ new Map();
-  setDbVersion(dbName, version) {
-    this.dbNameVersionDict.set(dbName, version);
-  }
-  getDbVersion(dbName) {
-    const version = this.dbNameVersionDict.get(dbName);
-    return version;
-  }
-}
-const dbVersionService = new DbVersionService();
 const ProductUpgradeStatements = [
   {
     toVersion: 1,
     statements: [
       `CREATE TABLE IF NOT EXISTS products (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        name TEXT NOT NULL,
-        description TEXT,
-        price NUMERIC NOT NULL,
-        category TEXT NOT NULL
-        );`
+            product_id INTEGER PRIMARY KEY AUTOINCREMENT,
+            name TEXT NOT NULL,
+            description TEXT,
+            price NUMERIC NOT NULL,
+            category TEXT NOT NULL
+            );`
     ]
   }
   /* add new statements below for next database version when required*/
@@ -180,7 +73,7 @@ class ProductService {
   versionUpgrades = ProductUpgradeStatements;
   loadToVersion = ProductUpgradeStatements[ProductUpgradeStatements.length - 1].toVersion;
   db;
-  database = "mydb";
+  database = "products";
   platform = sqliteService.getPlatform();
   isInitCompleted = new BehaviorSubject(false);
   async initializeDatabase() {
@@ -205,7 +98,10 @@ class ProductService {
     }
   }
   async getProducts() {
-    return (await this.db.query("SELECT * FROM products;")).values;
+    return (await this.db.query("SELECT product_id as id, name, description, price, category FROM products;")).values;
+  }
+  async getProductsWithPurchases() {
+    return (await this.db.query("SELECT product_id as id, name, description, price, category FROM products NATURAL JOIN purchases;")).values;
   }
   async addProduct(Product) {
     const sql = `INSERT INTO products (name, description, price, category) VALUES (?,?,?,?);`;
@@ -217,11 +113,11 @@ class ProductService {
     }
   }
   async updateProductById(id) {
-    const sql = `UPDATE products SET WHERE id=${id}`;
+    const sql = `UPDATE products SET WHERE product_id=${id}`;
     await this.db.run(sql);
   }
   async deleteProductById(id) {
-    const sql = `DELETE FROM products WHERE id=${id}`;
+    const sql = `DELETE FROM products WHERE product_id=${id}`;
     await this.db.run(sql);
   }
   getDatabaseName() {
@@ -235,9 +131,7 @@ const productService = new ProductService();
 export {
   cubicOut as a,
   cn as c,
-  dbVersionService as d,
   flyAndScale as f,
   is_void as i,
-  productService as p,
-  sqliteService as s
+  productService as p
 };

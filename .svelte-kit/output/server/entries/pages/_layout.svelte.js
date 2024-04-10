@@ -1,7 +1,7 @@
 import { c as create_ssr_component, v as validate_component, a as compute_rest_props, b as spread, e as escape_attribute_value, d as escape_object, f as add_attribute, s as setContext, g as getContext, h as subscribe, i as escape } from "../../chunks/ssr.js";
-import { I as Icon, n as noop, i as isHTMLElement, t as toWritableStores, o as omit, a as overridable, g as generateIds, m as makeElement, e as executeCallbacks, b as addEventListener, c as addMeltEventListener, r as removeUndefined, s as styleToString, p as portalAttr, d as effect, f as createElHelpers, k as kbd, h as isTouch, j as tick, l as getPortalDestination, u as usePortal, q as isElement, v as isDocument, w as isBrowser, x as createBitAttrs, y as createDialog, z as removeUndefined$1, A as getOptionUpdater, B as createDispatcher, C as fade, D as fly, E as purchaseRecordService, F as Button } from "../../chunks/PurchaseRecordsService.js";
+import { I as Icon, n as noop, i as isHTMLElement, t as toWritableStores, o as omit, a as overridable, g as generateIds, m as makeElement, e as executeCallbacks, b as addEventListener, c as addMeltEventListener, r as removeUndefined, s as styleToString, p as portalAttr, d as effect, f as createElHelpers, k as kbd, h as isTouch, j as tick, l as getPortalDestination, u as usePortal, q as isElement, v as isDocument, w as isBrowser, x as createBitAttrs, y as createDialog, z as removeUndefined$1, A as getOptionUpdater, B as createDispatcher, C as fade, D as fly, E as Button } from "../../chunks/index2.js";
 import "clsx";
-import { c as cn, f as flyAndScale, s as sqliteService, p as productService, i as is_void } from "../../chunks/ProductService.js";
+import { c as cn, f as flyAndScale, p as productService, i as is_void } from "../../chunks/ProductService.js";
 import "dequal";
 import { d as derived, w as writable } from "../../chunks/index.js";
 import { tv } from "tailwind-variants";
@@ -9,6 +9,7 @@ import { flip, offset, shift, arrow, size, autoUpdate, computePosition } from "@
 import { p as page } from "../../chunks/stores.js";
 import { Capacitor } from "@capacitor/core";
 import { applyPolyfills, defineCustomElements } from "jeep-sqlite/loader/index.js";
+import { s as sqliteService, p as purchaseRecordService } from "../../chunks/PurchaseRecordsService.js";
 const Home = create_ssr_component(($$result, $$props, $$bindings, slots) => {
   const iconNode = [
     [
@@ -1409,7 +1410,8 @@ let AppInitializer$1 = class AppInitializer {
     if (this.platform === "web") {
       await new Promise((r) => setTimeout(r, 500));
     }
-    await this.setupDatabase();
+    await this.setupProductDatabase();
+    await this.setupPurchaseDatabase();
   }
   async setupPlugin() {
     console.log("Setting up plugins...");
@@ -1423,22 +1425,28 @@ let AppInitializer$1 = class AppInitializer {
       throw new Error(`AppInitializer setupPlugin: ${msg}`);
     }
   }
-  async setupDatabase() {
+  async setupProductDatabase() {
     try {
       await productService.initializeDatabase();
-      await purchaseRecordService.initializeDatabase();
       if (this.platform === "web") {
-        await sqliteService.saveToStore("mydb");
+        await sqliteService.saveToStore(productService.getDatabaseName());
       }
-      const tables = await Promise.all([
-        purchaseRecordService.db.getTableList(),
-        productService.db.getTableList()
-      ]);
-      console.log(tables);
       return;
     } catch (err) {
       const msg = err.message ? err.message : err;
       throw new Error(`AppInitializer setupUserDatabase: ${msg}`);
+    }
+  }
+  async setupPurchaseDatabase() {
+    try {
+      await purchaseRecordService.initializeDatabase();
+      if (this.platform === "web") {
+        await sqliteService.saveToStore(purchaseRecordService.getDatabaseName());
+      }
+      return;
+    } catch (err) {
+      const msg = err.message ? err.message : err;
+      throw new Error(`AppInitializer setupPurchaseDatabase: ${msg}`);
     }
   }
 };

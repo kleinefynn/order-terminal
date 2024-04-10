@@ -2,6 +2,7 @@ import { c as create_ssr_component, a as compute_rest_props, b as spread, e as e
 import { c as cn, i as is_void } from "../../../chunks/ProductService.js";
 import "clsx";
 import { p as products } from "../../../chunks/products.store.js";
+import "../../../chunks/purchases.store.js";
 import "@capacitor-community/sqlite";
 import "@capacitor/core";
 const Card = create_ssr_component(($$result, $$props, $$bindings, slots) => {

@@ -10,15 +10,20 @@
   },
   "_ProductService.js": {
     "file": "chunks/ProductService.js",
-    "name": "ProductService"
+    "name": "ProductService",
+    "imports": [
+      "_PurchaseRecordsService.js"
+    ]
   },
   "_PurchaseRecordsService.js": {
     "file": "chunks/PurchaseRecordsService.js",
-    "name": "PurchaseRecordsService",
+    "name": "PurchaseRecordsService"
+  },
+  "_client.js": {
+    "file": "chunks/client.js",
+    "name": "client",
     "imports": [
-      "_ssr.js",
-      "_ProductService.js",
-      "_index.js"
+      "_exports.js"
     ]
   },
   "_exports.js": {
@@ -30,6 +35,15 @@
     "name": "index",
     "imports": [
       "_ssr.js"
+    ]
+  },
+  "_index2.js": {
+    "file": "chunks/index2.js",
+    "name": "index",
+    "imports": [
+      "_ssr.js",
+      "_ProductService.js",
+      "_index.js"
     ]
   },
   "_internal.js": {
@@ -47,6 +61,14 @@
       "_index.js"
     ]
   },
+  "_purchases.store.js": {
+    "file": "chunks/purchases.store.js",
+    "name": "purchases.store",
+    "imports": [
+      "_PurchaseRecordsService.js",
+      "_index.js"
+    ]
+  },
   "_ssr.js": {
     "file": "chunks/ssr.js",
     "name": "ssr"
@@ -56,7 +78,7 @@
     "name": "stores",
     "imports": [
       "_ssr.js",
-      "_exports.js"
+      "_client.js"
     ]
   },
   "node_modules/@sveltejs/kit/src/runtime/components/error.svelte": {
@@ -87,10 +109,11 @@
     "isEntry": true,
     "imports": [
       "_ssr.js",
-      "_PurchaseRecordsService.js",
+      "_index2.js",
       "_ProductService.js",
       "_index.js",
-      "_stores.js"
+      "_stores.js",
+      "_PurchaseRecordsService.js"
     ],
     "css": [
       "_app/immutable/assets/_layout.WPU6NiiR.css"
@@ -108,7 +131,8 @@
     "src": "src/routes/+page.svelte",
     "isEntry": true,
     "imports": [
-      "_ssr.js"
+      "_ssr.js",
+      "_client.js"
     ]
   },
   "src/routes/auswertung/+page.svelte": {
@@ -117,7 +141,8 @@
     "src": "src/routes/auswertung/+page.svelte",
     "isEntry": true,
     "imports": [
-      "_ssr.js"
+      "_ssr.js",
+      "_purchases.store.js"
     ]
   },
   "src/routes/einstellungen/+page.svelte": {
@@ -136,10 +161,12 @@
     "isEntry": true,
     "imports": [
       "_ssr.js",
-      "_PurchaseRecordsService.js",
+      "_index2.js",
       "_ProductService.js",
       "_index.js",
-      "_products.store.js"
+      "_products.store.js",
+      "_purchases.store.js",
+      "_PurchaseRecordsService.js"
     ]
   },
   "src/routes/kasse/+page.svelte": {
@@ -150,7 +177,8 @@
     "imports": [
       "_ssr.js",
       "_ProductService.js",
-      "_products.store.js"
+      "_products.store.js",
+      "_purchases.store.js"
     ]
   },
   "src/routes/produkte/+page.svelte": {
