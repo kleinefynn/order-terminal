@@ -4,5 +4,5 @@ node_modules/
 build/
 tmp/
 temp/
-.svelte-kit/output
-.svelte-kit/generated
+.svelte-kit/*
+!.svelte-kit/tsconfig
