@@ -14,6 +14,7 @@
 	import * as Sheet from '$lib/components/ui/sheet/index.js';
 	import * as Tooltip from '$lib/components/ui/tooltip/index.js';
 	import { page } from "$app/stores";
+	import { Toaster } from "$lib/components/ui/sonner";
 
 	// SETUP SQLITE;
 	import { afterUpdate } from 'svelte';
@@ -56,6 +57,8 @@
     });
 
 </script>
+
+<Toaster />
 
 <div class="flex min-h-screen w-full flex-col bg-muted/40">
 	<aside class="fixed inset-y-0 left-0 z-10 hidden w-14 flex-col border-r bg-background sm:flex">
@@ -195,6 +198,15 @@
 						>
 							<LineChart class="h-5 w-5" />
 							Auswertung
+						</a>
+						<a
+							href="einstellungen"
+							class="flex items-center gap-4 px-2.5 hover:text-foreground"
+							class:text-accent-foreground={$page.url.pathname === "/einstellungen"}
+							class:text-muted-foreground={$page.url.pathname !== "/einstellungen"}
+						>
+							<Settings class="h-5 w-5" />
+							Einstellungen
 						</a>
 					</nav>
 				</Sheet.Content>

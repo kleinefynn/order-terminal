@@ -49,13 +49,20 @@
     "@capacitor/android": "^5.7.4",
     "@capacitor/cli": "^5.7.4",
     "@capacitor/core": "^5.7.4",
+    "@capacitor/filesystem": "^5.2.1",
+    "@capacitor/share": "^5.0.7",
     "bits-ui": "^0.21.2",
     "clsx": "^2.1.0",
     "cmdk-sv": "^0.0.17",
     "embla-carousel-svelte": "^8.0.0",
+    "formsnap": "^1.0.0",
     "jeep-sqlite": "^2.6.2",
+    "mode-watcher": "^0.3.0",
     "rxjs": "^7.8.1",
+    "svelte-sonner": "^0.3.22",
+    "sveltekit-superforms": "^2.12.4",
     "tailwind-merge": "^2.2.2",
-    "tailwind-variants": "^0.2.1"
+    "tailwind-variants": "^0.2.1",
+    "zod": "^3.22.4"
   }
 }

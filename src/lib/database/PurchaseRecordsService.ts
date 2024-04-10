@@ -9,7 +9,7 @@ export interface IPurchaseRecordService {
     initializeDatabase(): Promise<void>
     getPurchaseRecords(): Promise<PurchaseRecord[]>
     addPurchaseRecord(PurchaseRecord: AddPurchase): Promise<void>
-    updatePurchaseRecordById(id: number, active: number): Promise<void> 
+    updatePurchaseRecordById(id: number, active: number): Promise<void>
     deletePurchaseRecordById(id: number): Promise<void>
     getDatabaseName(): string
     getDatabaseVersion(): number
@@ -17,7 +17,7 @@ export interface IPurchaseRecordService {
 
 class PurchaseRecordService implements IPurchaseRecordService {
     versionUpgrades = PurchasesUpgradeStatements;
-    loadToVersion = PurchasesUpgradeStatements[PurchasesUpgradeStatements.length-1].toVersion;
+    loadToVersion = PurchasesUpgradeStatements[PurchasesUpgradeStatements.length - 1].toVersion;
     db!: SQLiteDBConnection;
     database: string = 'purchases';
     platform = sqliteService.getPlatform();
@@ -26,16 +26,18 @@ class PurchaseRecordService implements IPurchaseRecordService {
     async initializeDatabase(): Promise<void> {
         // create upgrade statements
         try {
-            await sqliteService.addUpgradeStatement({database: this.database,
-                                                  upgrade: this.versionUpgrades});
+            await sqliteService.addUpgradeStatement({
+                database: this.database,
+                upgrade: this.versionUpgrades
+            });
             this.db = await sqliteService.openDatabase(this.database, this.loadToVersion, false);
-            dbVersionService.setDbVersion(this.database,this.loadToVersion);
-            if( this.platform === 'web') {
-              await sqliteService.saveToStore(this.database);
+            dbVersionService.setDbVersion(this.database, this.loadToVersion);
+            if (this.platform === 'web') {
+                await sqliteService.saveToStore(this.database);
             }
             this.isInitCompleted.next(true);
             this.isInitCompleted.complete();
-        } catch(err) {
+        } catch (err) {
             const msg = (err as Error).message ? (err as Error).message : err;
             throw new Error(`PurchaseRecordService.initializeDatabase: ${msg}`);
         }
@@ -50,7 +52,7 @@ class PurchaseRecordService implements IPurchaseRecordService {
         let records_with_products: PurchaseRecord[] = records.map((record) => {
             let filtered: PurchaseWithoutId[] = purchases.filter((v) => v.purchase_id === record.id).map((s) => {
                 const { purchase_id, ...ret } = s;
-                return ret as PurchaseWithoutId; 
+                return ret as PurchaseWithoutId;
             });
 
             return {
@@ -60,12 +62,12 @@ class PurchaseRecordService implements IPurchaseRecordService {
         });
 
         return records_with_products;
-        
+
     }
 
     async addPurchaseRecord(record: AddPurchase): Promise<void> {
         const sql = `INSERT INTO purchase_record (time) VALUES (?);`;
-        const res = await this.db.run(sql,[record.time]);
+        const res = await this.db.run(sql, [record.time]);
         if (res.changes !== undefined
             && res.changes.lastId !== undefined && res.changes.lastId > 0) {
         } else {
@@ -76,10 +78,9 @@ class PurchaseRecordService implements IPurchaseRecordService {
         const purchase_id = this.convertu8(purchase_id_u8);
 
         for (const product of record.purchases) {
-            const sql = `INSERT INTO purchases (purchase_id, product_id, amount, price, name, description, category) VALUES (?, ?, ?, ?, ? , ?, ?);`;
-            const res = await this.db.run(sql,[
+            const sql = `INSERT INTO purchases (purchase_id, amount, price, name, description, category) VALUES (?, ?, ?, ?, ?, ?);`;
+            const res = await this.db.run(sql, [
                 purchase_id,
-                product.product_id,
                 product.amount,
                 product.price,
                 product.name,

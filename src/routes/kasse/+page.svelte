@@ -14,7 +14,7 @@
 		<div class="mx-auto flex w-full flex-col flex-wrap gap-4 md:flex-row">
 			{#each list as fee}
 				<Card.Root
-					class="relative w-full cursor-pointer hover:bg-red-100 lg:w-fit"
+					class="relative w-full cursor-pointer hover:bg-primary/20 lg:w-fit"
 					on:click={() => warenkorb.addItem(fee)}
 				>
 					<Card.Header>

@@ -2,12 +2,10 @@ export interface PurchaseRecord {
     id: number
     time: string
     purchases: Purchase[],
-    
 }
 
 export interface Purchase {
     purchase_id: number,
-    product_id: number,
     name: string
     description?: string,
     price: number,
@@ -16,4 +14,4 @@ export interface Purchase {
 }
 
 export type PurchaseWithoutId = Omit<Purchase, 'purchase_id'>;
-export type AddPurchase = Pick<PurchaseRecord, 'time'> & {purchases: PurchaseWithoutId[]};
+export type AddPurchase = Pick<PurchaseRecord, 'time'> & { purchases: PurchaseWithoutId[] };
