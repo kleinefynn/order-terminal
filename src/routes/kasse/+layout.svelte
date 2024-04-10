@@ -88,8 +88,9 @@
 
 		<div class="mx-auto my-2 flex w-64 flex-col gap-2">
 			<AlertDialog.Root>
-				<AlertDialog.Trigger
-					><Button class="w-full">Erfassen</Button></AlertDialog.Trigger
+				<AlertDialog.Trigger disabled={Object.values($warenkorb).length === 0}
+					><Button class="w-full" disabled={Object.values($warenkorb).length === 0}>Erfassen</Button
+					></AlertDialog.Trigger
 				>
 				<AlertDialog.Content>
 					<AlertDialog.Header>
@@ -102,10 +103,13 @@
 				</AlertDialog.Content>
 			</AlertDialog.Root>
 
-
-			<AlertDialog.Root>
-				<AlertDialog.Trigger
-					><Button variant="secondary" class="w-full">Löschen</Button></AlertDialog.Trigger
+			<AlertDialog.Root open={false}>
+				<AlertDialog.Trigger disabled={Object.values($warenkorb).length === 0}
+					><Button
+						variant="secondary"
+						class="w-full"
+						disabled={Object.values($warenkorb).length === 0}>Löschen</Button
+					></AlertDialog.Trigger
 				>
 				<AlertDialog.Content>
 					<AlertDialog.Header>
