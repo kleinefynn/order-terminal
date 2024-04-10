@@ -60,7 +60,7 @@
 <div class="flex min-h-screen w-full flex-col bg-muted/40">
 	<aside class="fixed inset-y-0 left-0 z-10 hidden w-14 flex-col border-r bg-background sm:flex">
 		<nav class="flex flex-col items-center gap-4 px-2 py-4">
-			<Tooltip.Root>
+			<!--<Tooltip.Root>
 				<Tooltip.Trigger asChild let:builder>
 					<a
 						href="/"
@@ -76,7 +76,7 @@
 					</a>
 				</Tooltip.Trigger>
 				<Tooltip.Content side="right">Dashboard</Tooltip.Content>
-			</Tooltip.Root>
+			</Tooltip.Root>-->
 			<Tooltip.Root>
 				<Tooltip.Trigger asChild let:builder>
 					<a
@@ -162,7 +162,7 @@
 				</Sheet.Trigger>
 				<Sheet.Content side="left" class="sm:max-w-xs">
 					<nav class="grid gap-6 text-lg font-medium">
-						<a
+						<!--<a
 							href="/"
 							class="flex items-center gap-4 px-2.5 hover:text-foreground"
 							class:text-accent-foreground={$page.url.pathname === "/"}
@@ -170,7 +170,7 @@
 						>
 							<Home class="h-5 w-5" />
 							Dashboard
-						</a>
+						</a>-->
 						<a href="/kasse" 
 							class="flex items-center gap-4 px-2.5 hover:text-foreground"
 							class:text-accent-foreground={$page.url.pathname === "/kasse"}
