@@ -202,7 +202,7 @@
 			<Breadcrumb.Root class="hidden md:flex">
 				<Breadcrumb.List>
 					<Breadcrumb.Item>
-						<Breadcrumb.Link href="kasse">Kasse</Breadcrumb.Link>
+						<Breadcrumb.Link href={$page.url.pathname}>{$page.url.pathname.charAt(1).toUpperCase() + $page.url.pathname.substring(2)}</Breadcrumb.Link>
 					</Breadcrumb.Item>
 					<!--<Breadcrumb.Separator />
 					<Breadcrumb.Item>
