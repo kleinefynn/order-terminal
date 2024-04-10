@@ -5,3 +5,4 @@ build/
 tmp/
 temp/
 .svelte-kit/output
+.svelte-kit/generated
