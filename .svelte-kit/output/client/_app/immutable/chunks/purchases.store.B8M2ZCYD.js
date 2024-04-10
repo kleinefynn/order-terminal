@@ -1,1 +1,0 @@
-import{p as t}from"./PurchaseRecordsService.BX4yT4NV.js";import{w as r}from"./index.CPPoq43l.js";const{subscribe:c,set:o,update:p}=r([]);t.isInitCompleted.subscribe({complete:async()=>{await a()}});const i=(...s)=>{p(e=>(e.push(...s),e))},a=async()=>{const s=await t.getPurchaseRecords();o(s)},d={subscribe:c,add:i,refresh:a};export{d as p};

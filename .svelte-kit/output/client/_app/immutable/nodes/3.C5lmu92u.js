@@ -1,1 +1,0 @@
-import{s as t}from"../chunks/scheduler.dLFNV8Df.js";import{S as e,i as n}from"../chunks/index.BA_2R03l.js";import{g as r}from"../chunks/entry.CduNTJ4M.js";function a(o){return r("/kasse"),[]}class c extends e{constructor(s){super(),n(this,s,a,null,t,{})}}export{c as component};
