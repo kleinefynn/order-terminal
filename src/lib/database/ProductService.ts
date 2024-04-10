@@ -18,7 +18,7 @@ class ProductService implements IProductService {
     versionUpgrades = ProductUpgradeStatements;
     loadToVersion = ProductUpgradeStatements[ProductUpgradeStatements.length-1].toVersion;
     db!: SQLiteDBConnection;
-    database: string = 'mydb';
+    database: string = 'products';
     platform = sqliteService.getPlatform();
     isInitCompleted = new BehaviorSubject(false);
 

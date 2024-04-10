@@ -8,6 +8,7 @@ export const PurchasesUpgradeStatements = [
         );`,
         `CREATE TABLE IF NOT EXISTS purchases (
             purchase_id INTEGER,
+            product_id INTEGER,
             amount INTEGER NOT NULL,
             NAME TEXT NOT NULL,
             description TEXT,

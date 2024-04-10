@@ -1,10 +1,7 @@
-import type { ShoppingCartItem } from "../../../routes/kasse/Item"
-import type { Product } from "./Product"
-
 export interface PurchaseRecord {
     id: number
     time: string
-    products: ShoppingCartItem[],
+    purchases: Purchase[],
     
 }
 
@@ -17,3 +14,6 @@ export interface Purchase {
     category: string
     amount: number,
 }
+
+export type PurchaseWithoutId = Omit<Purchase, 'purchase_id'>;
+export type AddPurchase = Pick<PurchaseRecord, 'time'> & {purchases: PurchaseWithoutId[]};

@@ -3,7 +3,7 @@ import type { ShoppingCartItem } from './Item';
 import '../products.store';
 import type { Product } from '$lib/database/models/Product';
 import { purchaseRecordService } from '$lib/database/PurchaseRecordsService';
-import { productService } from '$lib/database/ProductService';
+import type { PurchaseWithoutId } from '$lib/database/models/PurchaseRecord';
 
 type Warenkorb = { [id: string] : ShoppingCartItem; };
 
@@ -54,20 +54,25 @@ const reset = () => {
 };
     
 const purchase = async () => {
-    let products: ShoppingCartItem[] = Object.values(items);
+    let products: ShoppingCartItem[] | PurchaseWithoutId[] = Object.values(items);
 
     if (products.length === 0) {
         return;
     }
 
-    await purchaseRecordService.addPurchaseRecord({
-        time: new Date().toISOString(),
-        products: products,
-        price: 3,
-        amount: 1,
+
+    products = products.map(product => {
+        return {...product.product, amount: product.amount, product_id: product.product.id};
     });
 
-    await purchaseRecordService.getPurchaseRecords();
+    await purchaseRecordService.addPurchaseRecord({
+        time: new Date().toISOString(),
+        purchases: products,
+    });
+
+    let purchases = await purchaseRecordService.getPurchaseRecords();
+    console.log(purchases);
+    
     reset();
 
 }
