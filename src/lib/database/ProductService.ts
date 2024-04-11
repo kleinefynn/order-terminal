@@ -9,14 +9,14 @@ export interface IProductService {
     initializeDatabase(): Promise<void>
     getProducts(): Promise<Product[]>
     addProduct(Product: Product): Promise<number>
-    updateProductById(id: number, active: number): Promise<void> 
+    updateProductById(id: number, active: number): Promise<void>
     deleteProductById(id: number): Promise<void>
     getDatabaseName(): string
-    getDatabaseVersion(): number
+    getDatabaseVersion(): number,
 }
 class ProductService implements IProductService {
     versionUpgrades = ProductUpgradeStatements;
-    loadToVersion = ProductUpgradeStatements[ProductUpgradeStatements.length-1].toVersion;
+    loadToVersion = ProductUpgradeStatements[ProductUpgradeStatements.length - 1].toVersion;
     db!: SQLiteDBConnection;
     database: string = 'products';
     platform = sqliteService.getPlatform();
@@ -25,22 +25,24 @@ class ProductService implements IProductService {
     async initializeDatabase(): Promise<void> {
         // create upgrade statements
         try {
-            await sqliteService.addUpgradeStatement({database: this.database,
-                                                  upgrade: this.versionUpgrades});
+            await sqliteService.addUpgradeStatement({
+                database: this.database,
+                upgrade: this.versionUpgrades
+            });
             this.db = await sqliteService.openDatabase(this.database, this.loadToVersion, false);
             const isData = await this.db.query("select * from sqlite_sequence");
-            if(isData.values!.length === 0) {
-            // create database initial Products if any
+            if (isData.values!.length === 0) {
+                // create database initial Products if any
 
             }
 
-            dbVersionService.setDbVersion(this.database,this.loadToVersion);
-            if( this.platform === 'web') {
-              await sqliteService.saveToStore(this.database);
+            dbVersionService.setDbVersion(this.database, this.loadToVersion);
+            if (this.platform === 'web') {
+                await sqliteService.saveToStore(this.database);
             }
             this.isInitCompleted.next(true);
             this.isInitCompleted.complete();
-        } catch(err) {
+        } catch (err) {
             const msg = (err as Error).message ? (err as Error).message : err;
             throw new Error(`ProductService.initializeDatabase: ${msg}`);
         }
@@ -53,7 +55,7 @@ class ProductService implements IProductService {
     }
     async addProduct(Product: Omit<Product, 'id'>): Promise<number> {
         const sql = `INSERT INTO products (name, description, price, category) VALUES (?,?,?,?);`;
-        const res = await this.db.run(sql,[Product.name, Product.description, Product.price, Product.category]);
+        const res = await this.db.run(sql, [Product.name, Product.description, Product.price, Product.category]);
         if (res.changes !== undefined
             && res.changes.lastId !== undefined && res.changes.lastId > 0) {
             return res.changes.lastId;
@@ -67,6 +69,10 @@ class ProductService implements IProductService {
     }
     async deleteProductById(id: number): Promise<void> {
         const sql = `DELETE FROM products WHERE product_id=${id}`;
+        await this.db.run(sql);
+    }
+    async flushTable(): Promise<void> {
+        const sql = `DELETE FROM products`;
         await this.db.run(sql);
     }
     getDatabaseName(): string {
