@@ -6,38 +6,38 @@ type Store = Map<string, Product[]>;
 
 let products_map = new Map<string, Product[]>();
 
-const {subscribe, set, update} = writable(products_map);
+const { subscribe, set, update } = writable(products_map);
 
 const remove = async (category: string, id: number) => {
-    try {
-        await productService.deleteProductById(id);
-        
+	try {
+		await productService.deleteProductById(id);
+
 		update((store: Store) => {
 			let products = store.get(category);
-            delete products?.filter((v) => v.id === id)[0];
-            return store;
-        });
-    } catch (e) {
-        console.error(e);
-        
-    }
+			delete products?.filter((v) => v.id === id)[0];
+			return store;
+		});
+	} catch (e) {
+		console.error(e);
+
+	}
 }
 
 const add = async (product: Omit<Product, 'id'>) => {
-    try {
-        let id = await productService.addProduct(product);
-		let p = {id: id, ...product};
+	try {
+		let id = await productService.addProduct(product);
+		let p = { id: id, ...product };
 
-        update((store: Store) => {
-            let products = store.get(p.category);
+		update((store: Store) => {
+			let products = store.get(p.category);
 
 			products?.push(p);
 
 			return store;
-        });
-    } catch (e) {
-        console.error(e);   
-    }
+		});
+	} catch (e) {
+		console.error(e);
+	}
 }
 
 let sample_products: Omit<Product, 'id'>[] = [
@@ -89,7 +89,7 @@ productService.isInitCompleted.subscribe({
 async function init_store() {
 	let products = await productService.getProducts();
 
-	if( products.length == 0) {
+	if (products.length == 0) {
 		for (const p of sample_products) {
 			await productService.addProduct(p);
 		}
@@ -109,15 +109,26 @@ async function init_store() {
 
 		list.push(product);
 	}
-	
+
 	set(products_map);
 }
 
 const get = () => Array.from(products_map.values())
 
+
+const exportProducts = async () => {
+	throw Error("not implemented!");
+}
+
+const importProducts = async () => {
+	throw Error("not implemented!");
+}
+
 export default {
-    subscribe,
-    add,
-    remove,
+	subscribe,
+	add,
+	remove,
 	get,
+	exportProducts,
+	importProducts
 };
