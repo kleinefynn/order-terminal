@@ -35,11 +35,11 @@
 					</Card.Root>
 				{/each}
 
-				<AddCard />
+				<AddCard {category} />
 			</div>
 		</div>
 	{/each}
 
 	<h5 class="mb-2 text-xl font-bold text-muted-foreground">Neue Kategorie</h5>
-	<AddCard />
+	<AddCard category="" />
 </div>

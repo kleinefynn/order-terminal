@@ -49,16 +49,8 @@ const remove = async (category: string, id: number) => {
 
 const add = async (product: Omit<Product, 'id'>) => {
 	try {
-		let id = await productService.addProduct(product);
-		let p = { id: id, ...product };
-
-		update((store: Store) => {
-			let products = store.get(p.category);
-
-			products?.push(p);
-
-			return store;
-		});
+		await productService.addProduct(product);
+		await refresh();
 	} catch (e) {
 		console.error(e);
 	}
