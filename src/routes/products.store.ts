@@ -64,6 +64,12 @@ const add = async (product: Omit<Product, 'id'>) => {
 	}
 }
 
+const fromBinary = (str: string) => {
+	return decodeURIComponent(Array.prototype.map.call(atob(str), function (c) {
+		return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2)
+	}).join(''))
+}
+
 const exportProducts = async () => {
 	const products: Product[] = await productService.getProducts();
 
@@ -87,11 +93,6 @@ const exportProducts = async () => {
 
 const importProducts = async () => {
 	const CHUNK_SIZE = 4;
-	const fromBinary = (str: string) => {
-		return decodeURIComponent(Array.prototype.map.call(atob(str), function (c) {
-			return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2)
-		}).join(''))
-	}
 
 	const result = (await FilePicker.pickFiles({
 		types: ['text/csv'],

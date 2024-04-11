@@ -1,64 +1,65 @@
 <script lang="ts">
-    import "../app.scss";
-	import Home from 'lucide-svelte/icons/home';
+	import '../app.scss';
 	import LineChart from 'lucide-svelte/icons/line-chart';
 	import Package from 'lucide-svelte/icons/package';
 	import PanelLeft from 'lucide-svelte/icons/panel-left';
-	import Search from 'lucide-svelte/icons/search';
 	import Settings from 'lucide-svelte/icons/settings';
 	import ShoppingCart from 'lucide-svelte/icons/shopping-cart';
 
+	import Sun from 'lucide-svelte/icons/sun';
+	import Moon from 'lucide-svelte/icons/moon';
+	import { ModeWatcher } from 'mode-watcher';
+	import { toggleMode } from 'mode-watcher';
+
 	import * as Breadcrumb from '$lib/components/ui/breadcrumb/index.js';
 	import { Button } from '$lib/components/ui/button/index.js';
-	import { Input } from '$lib/components/ui/input/index.js';
 	import * as Sheet from '$lib/components/ui/sheet/index.js';
 	import * as Tooltip from '$lib/components/ui/tooltip/index.js';
-	import { page } from "$app/stores";
-	import { Toaster } from "$lib/components/ui/sonner";
+	import { page } from '$app/stores';
+	import { Toaster } from '$lib/components/ui/sonner';
 
 	// SETUP SQLITE;
 	import { afterUpdate } from 'svelte';
 	import { Capacitor } from '@capacitor/core';
-	import {
-        defineCustomElements as jeepSqlite,
-        applyPolyfills,
-    } from 'jeep-sqlite/loader';
-	import AppInitializer from "$lib/components/AppInitializer.svelte";
+	import { defineCustomElements as jeepSqlite, applyPolyfills } from 'jeep-sqlite/loader';
+	import AppInitializer from '$lib/components/AppInitializer.svelte';
 
 	let toRender = false;
-    const platform = Capacitor.getPlatform();
+	const platform = Capacitor.getPlatform();
 
-    // Check if we're in the browser environment
-    if (typeof window !== 'undefined') {
-        applyPolyfills().then(() => {
-            jeepSqlite(window);
-        });
-        if (platform === "web") {
-            const jeepEl = document.createElement("jeep-sqlite");
-            document.body.appendChild(jeepEl);
-            customElements.whenDefined('jeep-sqlite').then(() => {
-                toRender = true;
-            })
-            .catch ((err) => {
-                console.error(`Error: ${err}`);
-                throw new Error(`Error: ${err}`)
-            });
-        } else {
-            toRender = true;
-        }
-    } else {
-        toRender = true;
-    }
-    // Wait until after the component updates to check if `jeep-sqlite` is defined
-    afterUpdate(() => {
-        if (!toRender) {
-            return;
-        }
-    });
-
+	// Check if we're in the browser environment
+	if (typeof window !== 'undefined') {
+		applyPolyfills().then(() => {
+			jeepSqlite(window);
+		});
+		if (platform === 'web') {
+			const jeepEl = document.createElement('jeep-sqlite');
+			document.body.appendChild(jeepEl);
+			customElements
+				.whenDefined('jeep-sqlite')
+				.then(() => {
+					toRender = true;
+				})
+				.catch((err) => {
+					console.error(`Error: ${err}`);
+					throw new Error(`Error: ${err}`);
+				});
+		} else {
+			toRender = true;
+		}
+	} else {
+		toRender = true;
+	}
+	// Wait until after the component updates to check if `jeep-sqlite` is defined
+	afterUpdate(() => {
+		if (!toRender) {
+			return;
+		}
+	});
 </script>
 
 <Toaster />
+<ModeWatcher />
 
 <div class="flex min-h-screen w-full flex-col bg-muted/40">
 	<aside class="fixed inset-y-0 left-0 z-10 hidden w-14 flex-col border-r bg-background sm:flex">
@@ -85,9 +86,9 @@
 					<a
 						href="/kasse"
 						class="flex h-9 w-9 items-center justify-center rounded-lg transition-colors hover:text-foreground md:h-8 md:w-8"
-						class:text-accent-foreground={$page.url.pathname === "/kasse"}
-						class:bg-accent={$page.url.pathname === "/kasse"}
-						class:text-muted-foreground={$page.url.pathname !== "/kasse"}
+						class:text-accent-foreground={$page.url.pathname === '/kasse'}
+						class:bg-accent={$page.url.pathname === '/kasse'}
+						class:text-muted-foreground={$page.url.pathname !== '/kasse'}
 						use:builder.action
 						{...builder}
 					>
@@ -102,9 +103,9 @@
 					<a
 						href="/produkte"
 						class="flex h-9 w-9 items-center justify-center rounded-lg transition-colors hover:text-foreground md:h-8 md:w-8"
-						class:text-accent-foreground={$page.url.pathname === "/produkte"}
-						class:bg-accent={$page.url.pathname === "/produkte"}
-						class:text-muted-foreground={$page.url.pathname !== "/produkte"}
+						class:text-accent-foreground={$page.url.pathname === '/produkte'}
+						class:bg-accent={$page.url.pathname === '/produkte'}
+						class:text-muted-foreground={$page.url.pathname !== '/produkte'}
 						use:builder.action
 						{...builder}
 					>
@@ -119,9 +120,9 @@
 					<a
 						href="/auswertung"
 						class="flex h-9 w-9 items-center justify-center rounded-lg transition-colors hover:text-foreground md:h-8 md:w-8"
-						class:text-accent-foreground={$page.url.pathname === "/auswertung"}
-						class:bg-accent={$page.url.pathname === "/auswertung"}
-						class:text-muted-foreground={$page.url.pathname !== "/auswertung"}
+						class:text-accent-foreground={$page.url.pathname === '/auswertung'}
+						class:bg-accent={$page.url.pathname === '/auswertung'}
+						class:text-muted-foreground={$page.url.pathname !== '/auswertung'}
 						use:builder.action
 						{...builder}
 					>
@@ -138,9 +139,9 @@
 					<a
 						href="/einstellungen"
 						class="flex h-9 w-9 items-center justify-center rounded-lg transition-colors hover:text-foreground md:h-8 md:w-8"
-						class:text-accent-foreground={$page.url.pathname === "/einstellungen"}
-						class:bg-accent={$page.url.pathname === "/einstellungen"}
-						class:text-muted-foreground={$page.url.pathname !== "/einstellungen"}
+						class:text-accent-foreground={$page.url.pathname === '/einstellungen'}
+						class:bg-accent={$page.url.pathname === '/einstellungen'}
+						class:text-muted-foreground={$page.url.pathname !== '/einstellungen'}
 						use:builder.action
 						{...builder}
 					>
@@ -174,18 +175,20 @@
 							<Home class="h-5 w-5" />
 							Dashboard
 						</a>-->
-						<a href="/kasse" 
+						<a
+							href="/kasse"
 							class="flex items-center gap-4 px-2.5 hover:text-foreground"
-							class:text-accent-foreground={$page.url.pathname === "/kasse"}
-							class:text-muted-foreground={$page.url.pathname !== "/kasse"}>
+							class:text-accent-foreground={$page.url.pathname === '/kasse'}
+							class:text-muted-foreground={$page.url.pathname !== '/kasse'}
+						>
 							<ShoppingCart class="h-5 w-5" />
 							Erfassen
 						</a>
 						<a
 							href="produkte"
 							class="flex items-center gap-4 px-2.5 hover:text-foreground"
-							class:text-accent-foreground={$page.url.pathname === "/produkte"}
-							class:text-muted-foreground={$page.url.pathname !== "/produkte"}
+							class:text-accent-foreground={$page.url.pathname === '/produkte'}
+							class:text-muted-foreground={$page.url.pathname !== '/produkte'}
 						>
 							<Package class="h-5 w-5" />
 							Produkte
@@ -193,8 +196,8 @@
 						<a
 							href="auswertung"
 							class="flex items-center gap-4 px-2.5 hover:text-foreground"
-							class:text-accent-foreground={$page.url.pathname === "/auswertung"}
-							class:text-muted-foreground={$page.url.pathname !== "/auswertung"}
+							class:text-accent-foreground={$page.url.pathname === '/auswertung'}
+							class:text-muted-foreground={$page.url.pathname !== '/auswertung'}
 						>
 							<LineChart class="h-5 w-5" />
 							Auswertung
@@ -202,8 +205,8 @@
 						<a
 							href="einstellungen"
 							class="flex items-center gap-4 px-2.5 hover:text-foreground"
-							class:text-accent-foreground={$page.url.pathname === "/einstellungen"}
-							class:text-muted-foreground={$page.url.pathname !== "/einstellungen"}
+							class:text-accent-foreground={$page.url.pathname === '/einstellungen'}
+							class:text-muted-foreground={$page.url.pathname !== '/einstellungen'}
 						>
 							<Settings class="h-5 w-5" />
 							Einstellungen
@@ -214,7 +217,10 @@
 			<Breadcrumb.Root class="hidden md:flex">
 				<Breadcrumb.List>
 					<Breadcrumb.Item>
-						<Breadcrumb.Link href={$page.url.pathname}>{$page.url.pathname.charAt(1).toUpperCase() + $page.url.pathname.substring(2)}</Breadcrumb.Link>
+						<Breadcrumb.Link href={$page.url.pathname}
+							>{$page.url.pathname.charAt(1).toUpperCase() +
+								$page.url.pathname.substring(2)}</Breadcrumb.Link
+						>
 					</Breadcrumb.Item>
 					<!--<Breadcrumb.Separator />
 					<Breadcrumb.Item>
@@ -226,6 +232,16 @@
 					</Breadcrumb.Item>-->
 				</Breadcrumb.List>
 			</Breadcrumb.Root>
+
+			<div class="relative ml-auto flex-1 grow-0">
+				<Button class="" on:click={toggleMode} variant="outline" size="icon">
+					<Sun class="h-5 w-5 rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0" />
+					<Moon
+						class="absolute h-5 w-5 rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100"
+					/>
+					<span class="sr-only">Toggle theme</span>
+				</Button>
+			</div>
 		</header>
 		<main>
 			<AppInitializer />

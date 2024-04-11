@@ -25,6 +25,12 @@ const add = (...records: PurchaseRecord[]) => {
     });
 }
 
+const fromBinary = (str: string) => {
+    return decodeURIComponent(Array.prototype.map.call(atob(str), function (c) {
+        return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2)
+    }).join(''))
+}
+
 const exportPurchases = async () => {
     const records: PurchaseRecord[] = await purchaseRecordService.getPurchaseRecords();
 
@@ -71,7 +77,7 @@ const importPurchases = async () => {
         throw Error("file empty!");
     }
 
-    const csv = atob(csv_base64);
+    const csv = fromBinary(csv_base64);
 
     const records = csv
         .trim()
