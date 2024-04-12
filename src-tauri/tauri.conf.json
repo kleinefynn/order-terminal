@@ -3,7 +3,7 @@
     "beforeBuildCommand": "bun run build",
     "beforeDevCommand": "bun run dev",
     "devPath": "http://localhost:5173",
-    "distDir": "../../static"
+    "distDir": "../static"
   },
   "package": {
     "productName": "order-terminal",
@@ -49,7 +49,7 @@
         "icons/icon.icns",
         "icons/icon.ico"
       ],
-      "identifier": "com.tauri.dev",
+      "identifier": "de.okulla-kleine",
       "longDescription": "",
       "macOS": {
         "entitlements": null,
