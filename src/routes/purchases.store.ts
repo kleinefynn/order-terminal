@@ -3,7 +3,11 @@ import type { Purchase, PurchaseRecord } from "$lib/database/models/PurchaseReco
 import { writable } from "svelte/store";
 import { Share } from '@capacitor/share';
 import { Directory, Encoding, Filesystem } from "@capacitor/filesystem";
-import { FilePicker } from '@capawesome/capacitor-file-picker';
+import { FilePicker, type PickedFile } from '@capawesome/capacitor-file-picker';
+import { Capacitor } from "@capacitor/core";
+import { save } from "@tauri-apps/api/dialog";
+import { writeBinaryFile } from "@tauri-apps/api/fs";
+
 
 const { subscribe, set, update } = writable<PurchaseRecord[]>([]);
 
@@ -49,23 +53,51 @@ const exportPurchases = async () => {
         return Object.values(d).join(",");
     }).join("\n");
 
-    const fileResult = await Filesystem.writeFile({
-        path: "export_purchases.csv",
-        data: csv,
-        directory: Directory.Cache,
-        encoding: Encoding.UTF8
-    });
+    const platform = Capacitor.getPlatform();
+    const suggestedFilename = "export_daten.csv";
 
-    await Share.share({
-        title: "Exportiere Daten",
-        url: "file://" + fileResult.uri,
-    })
+    switch (platform) {
+        case "android":
+            const fileUri = (await Filesystem.writeFile({
+                path: suggestedFilename,
+                data: csv,
+                directory: Directory.Cache,
+                encoding: Encoding.UTF8
+            })).uri;
+
+            await Share.share({
+                title: "Exportiere Daten",
+                url: "file://" + fileUri,
+            });
+            break;
+
+        case "web": {
+            //@ts-ignore
+            if (window.__TAURI__ !== undefined) {
+                const encoder = new TextEncoder();
+
+                // Save into the default downloads directory, like in the browser
+                const filePath = await save({
+                    defaultPath: suggestedFilename,
+                });
+
+                if (filePath == null) {
+                    throw Error("Exportieren abgebrochen")
+                }
+
+                await writeBinaryFile(filePath, encoder.encode(csv));
+                break;
+            }
+        }
+        default:
+            throw Error(`Platform nicht unterstützt! (${platform})`);
+    }
 }
 
 const importPurchases = async () => {
     const CHUNK_SIZE = 5;
 
-    const result = (await FilePicker.pickFiles({
+    const result: PickedFile = (await FilePicker.pickFiles({
         types: ['text/csv'],
         multiple: false,
         readData: true,

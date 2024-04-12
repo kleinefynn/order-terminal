@@ -1,8 +1,11 @@
 import { productService } from '$lib/database/ProductService';
 import type { Product } from '$lib/database/models/Product';
+import { Capacitor } from '@capacitor/core';
 import { Directory, Encoding, Filesystem } from '@capacitor/filesystem';
 import { Share } from '@capacitor/share';
 import { FilePicker } from '@capawesome/capacitor-file-picker';
+import { save } from '@tauri-apps/api/dialog';
+import { writeBinaryFile } from '@tauri-apps/api/fs';
 import { writable } from 'svelte/store';
 
 type Store = Map<string, Product[]>;
@@ -70,17 +73,45 @@ const exportProducts = async () => {
 		return Object.values(productWithoutId).join(",");
 	}).join("\n");
 
-	const fileResult = await Filesystem.writeFile({
-		path: "export_settings.csv",
-		data: csv,
-		directory: Directory.Cache,
-		encoding: Encoding.UTF8
-	});
+	const platform = Capacitor.getPlatform();
+	const suggestedFilename = "export_einstellungen.csv";
 
-	await Share.share({
-		title: "Exportiere Einstellungen",
-		url: "file://" + fileResult.uri,
-	})
+	switch (platform) {
+		case "android":
+			const fileUri = (await Filesystem.writeFile({
+				path: suggestedFilename,
+				data: csv,
+				directory: Directory.Cache,
+				encoding: Encoding.UTF8
+			})).uri;
+
+			await Share.share({
+				title: "Exportiere Daten",
+				url: "file://" + fileUri,
+			});
+			break;
+
+		case "web": {
+			//@ts-ignore
+			if (window.__TAURI__ !== undefined) {
+				const encoder = new TextEncoder();
+
+				// Save into the default downloads directory, like in the browser
+				const filePath = await save({
+					defaultPath: suggestedFilename,
+				});
+
+				if (filePath == null) {
+					throw Error("Exportieren abgebrochen")
+				}
+
+				await writeBinaryFile(filePath, encoder.encode(csv));
+				break;
+			}
+		}
+		default:
+			throw Error(`Platform nicht unterstützt! (${platform})`);
+	}
 }
 
 const importProducts = async () => {
