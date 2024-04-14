@@ -24,3 +24,6 @@ tauri = { version = "1.6.1", features = [ "fs-read-dir", "fs-read-file", "fs-wri
 # If you use cargo directly instead of tauri's cli you can use this feature flag to switch between tauri's `dev` and `build` modes.
 # DO NOT REMOVE!!
 custom-protocol = [ "tauri/custom-protocol" ]
+
+[workspace]
+members = ["entities", "services"]
