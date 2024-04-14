@@ -1,6 +1,6 @@
 use sea_orm_migration::prelude::*;
 
-use super::{m20240414_001_products::Products, m20240414_002_records::Records};
+use super::m20240414_002_records::Records;
 
 pub struct Migration;
 
@@ -18,22 +18,16 @@ impl MigrationTrait for Migration {
             .create_table(
                 Table::create()
                     .table(Purchases::Table)
-                    .col(ColumnDef::new(Purchases::ProductId).integer().not_null())
-                    .col(ColumnDef::new(Purchases::PurchaseId).integer().not_null())
-                    .primary_key(
-                        Index::create()
-                            .col(Purchases::PurchaseId)
-                            .col(Purchases::ProductId),
-                    )
+                    .col(ColumnDef::new(Purchases::RecordId).integer().not_null())
+                    .col(ColumnDef::new(Purchases::Name).text().not_null())
+                    .col(ColumnDef::new(Purchases::Description).text())
+                    .col(ColumnDef::new(Purchases::Category).text().not_null())
+                    .col(ColumnDef::new(Purchases::Price).decimal().not_null())
+                    .col(ColumnDef::new(Purchases::Amount).unsigned().not_null())
                     .foreign_key(
                         ForeignKey::create()
-                            .from(Purchases::Table, Purchases::PurchaseId)
+                            .from(Purchases::Table, Purchases::RecordId)
                             .to(Records::Table, Records::Id),
-                    )
-                    .foreign_key(
-                        ForeignKey::create()
-                            .from(Purchases::Table, Purchases::ProductId)
-                            .to(Products::Table, Products::Id),
                     )
                     .to_owned(),
             )
@@ -51,6 +45,10 @@ impl MigrationTrait for Migration {
 #[derive(Iden)]
 pub enum Purchases {
     Table,
-    PurchaseId,
-    ProductId,
+    RecordId,
+    Name,
+    Description,
+    Category,
+    Price,
+    Amount,
 }

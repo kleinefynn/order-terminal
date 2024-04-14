@@ -7,9 +7,15 @@ pub struct Model {
     #[sea_orm(primary_key)]
     #[serde(skip_deserializing)]
     pub record_id: i32,
-    #[sea_orm(primary_key)]
-    #[serde(skip_deserializing)]
-    pub product_id: i32,
+
+    pub name: String,
+    #[sea_orm(column_type = "Text")]
+    pub description: Option<String>,
+    #[sea_orm(column_type = "Text")]
+    pub category: String,
+    #[serde(with = "rust_decimal::serde::arbitrary_precision")]
+    pub price: Decimal,
+    pub amount: u32,
 }
 
 #[derive(Copy, Clone, Debug, EnumIter, DeriveRelation)]
@@ -20,12 +26,13 @@ pub enum Relation {
         to = "super::records::Column::Id"
     )]
     Purchase,
-    #[sea_orm(
-        belongs_to = "super::products::Entity",
-        from = "Column::ProductId",
-        to = "super::products::Column::Id"
-    )]
-    Product,
+}
+
+// `Related` trait has to be implemented by hand
+impl Related<super::records::Entity> for Entity {
+    fn to() -> RelationDef {
+        Relation::Purchase.def()
+    }
 }
 
 impl ActiveModelBehavior for ActiveModel {}

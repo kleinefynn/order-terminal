@@ -3418,8 +3418,10 @@ dependencies = [
 name = "services"
 version = "0.1.0"
 dependencies = [
+ "chrono",
  "entities",
  "sea-orm",
+ "serde",
 ]
 
 [[package]]

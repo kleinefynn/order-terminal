@@ -1,5 +1,5 @@
 import { purchaseRecordService } from "$lib/database/PurchaseRecordsService";
-import type { Purchase, PurchaseRecord } from "$lib/database/models/PurchaseRecord";
+import type { Purchase, PurchaseRecord, Purchases } from "$lib/database/models/PurchaseRecord";
 import { writable } from "svelte/store";
 import { Share } from '@capacitor/share';
 import { Directory, Encoding, Filesystem } from "@capacitor/filesystem";
@@ -9,7 +9,7 @@ import { save } from "@tauri-apps/api/dialog";
 import { writeBinaryFile } from "@tauri-apps/api/fs";
 
 
-const { subscribe, set, update } = writable<PurchaseRecord[]>([]);
+const { subscribe, set, update } = writable<Purchases[]>([]);
 
 const refresh = async () => {
     const data = await purchaseRecordService.getPurchaseRecords();
@@ -22,8 +22,8 @@ purchaseRecordService.isInitCompleted.subscribe({
     }
 })
 
-const add = (...records: PurchaseRecord[]) => {
-    update((store: PurchaseRecord[]) => {
+const add = (...records: Purchases[]) => {
+    update((store: Purchases[]) => {
         store.push(...records);
         return store;
     });
@@ -36,7 +36,7 @@ const fromBinary = (str: string) => {
 }
 
 const exportPurchases = async () => {
-    const records: PurchaseRecord[] = await purchaseRecordService.getPurchaseRecords();
+    const records: Purchases[] = await purchaseRecordService.getPurchaseRecords();
 
     let csv = records.map((record) => {
         let purchasesMerged = record.purchases.map((purchase) => {

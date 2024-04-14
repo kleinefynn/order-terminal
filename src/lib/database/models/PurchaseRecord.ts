@@ -1,17 +1,17 @@
-export interface PurchaseRecord {
-    id: number
-    time: string
-    purchases: Purchase[],
-}
-
 export interface Purchase {
     purchase_id: number,
-    name: string
+    name: string,
     description?: string,
+    category: string,
     price: number,
-    category: string
     amount: number,
 }
 
-export type PurchaseWithoutId = Omit<Purchase, 'purchase_id'>;
-export type AddPurchase = Pick<PurchaseRecord, 'time'> & { purchases: PurchaseWithoutId[] };
+export interface Record {
+    id: number
+    time: string,
+    purchases: Purchase[],
+}
+
+export type AddPurchase = Omit<Purchase, 'purchase_id'>;
+export type AddRecord = Pick<Record, 'time'> & { purchases: AddPurchase[] };

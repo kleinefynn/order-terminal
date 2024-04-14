@@ -25,7 +25,7 @@
 					>
 					<Table.Cell class="text-right"
 						>{purchase.purchases
-							.map((purchase) => purchase.price * purchase.amount)
+							.map((product) => product.price * product.amount)
 							.reduce((sum, curr) => sum + curr, 0)
 							.toFixed(2)}€</Table.Cell
 					>

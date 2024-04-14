@@ -5,7 +5,7 @@ use anyhow::Result;
 use migration::{migrator::Migrator, MigratorTrait};
 use services::{
     sea_orm::{Database, DatabaseConnection},
-    Product, ProductService,
+    AddRecord, Product, ProductService, RecordService,
 };
 const DB_URL: &str = "sqlite:///tmp/test.db?mode=rwc";
 
@@ -21,7 +21,12 @@ async fn main() -> Result<()> {
 
     tauri::Builder::default()
         .manage(state)
-        .invoke_handler(tauri::generate_handler![get_all_products, insert_product])
+        .invoke_handler(tauri::generate_handler![
+            get_all_products,
+            insert_product,
+            get_records,
+            insert_record
+        ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
 
@@ -33,8 +38,6 @@ async fn get_all_products(state: tauri::State<'_, AppState>) -> Result<String, S
     let products: Vec<Product::Model> = ProductService::get_all_products(&state.db)
         .await
         .expect("Error getting products");
-
-    println!("{:?}", products);
 
     Ok(serde_json::to_string(&products).expect("Couldn't ser"))
 }
@@ -48,6 +51,21 @@ async fn insert_product(
         .await
         .unwrap();
     Ok(insert_result.last_insert_id)
+}
+
+#[tauri::command]
+async fn get_records(state: tauri::State<'_, AppState>) -> Result<String, String> {
+    let res = RecordService::get_all_records(&state.db).await.unwrap();
+    Ok(serde_json::to_string(&res).expect("Serialize failed!"))
+}
+
+#[tauri::command]
+async fn insert_record(state: tauri::State<'_, AppState>, record: AddRecord) -> Result<(), String> {
+    RecordService::insert_record(&state.db, record)
+        .await
+        .unwrap();
+
+    Ok(())
 }
 
 #[derive(Clone)]

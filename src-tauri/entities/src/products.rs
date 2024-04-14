@@ -20,14 +20,4 @@ pub struct Model {
 #[derive(Copy, Clone, Debug, EnumIter, DeriveRelation)]
 pub enum Relation {}
 
-impl Related<super::records::Entity> for Entity {
-    fn to() -> RelationDef {
-        super::purchases::Relation::Purchase.def()
-    }
-
-    fn via() -> Option<RelationDef> {
-        Some(super::purchases::Relation::Product.def().rev())
-    }
-}
-
 impl ActiveModelBehavior for ActiveModel {}

@@ -1,14 +1,15 @@
-import type { AddPurchase, Purchase, PurchaseRecord, PurchaseWithoutId } from './models/PurchaseRecord';
+import type { AddRecord, Purchase, Record } from './models/PurchaseRecord';
 import { SQLiteDBConnection } from '@capacitor-community/sqlite';
 import { sqliteService } from './SQLiteService';
 import { dbVersionService } from './DbVersionService';
 import { BehaviorSubject } from 'rxjs';
 import { PurchasesUpgradeStatements } from './upgrades/purchases.migration';
+import { invoke } from '@tauri-apps/api';
 
 export interface IPurchaseRecordService {
     initializeDatabase(): Promise<void>
-    getPurchaseRecords(): Promise<PurchaseRecord[]>
-    addPurchaseRecord(PurchaseRecord: AddPurchase): Promise<void>
+    getPurchaseRecords(): Promise<Record[]>
+    addPurchaseRecord(PurchaseRecord: AddRecord): Promise<void>
     updatePurchaseRecordById(id: number, active: number): Promise<void>
     deletePurchaseRecordById(id: number): Promise<void>
     getDatabaseName(): string
@@ -42,57 +43,30 @@ class PurchaseRecordService implements IPurchaseRecordService {
             throw new Error(`PurchaseRecordService.initializeDatabase: ${msg}`);
         }
     }
-    async getPurchaseRecords(): Promise<PurchaseRecord[]> {
-        let [records, purchases] = await Promise.all([
-            this.db.query(`SELECT purchase_id AS id, time FROM purchase_record`).then((r) => r.values as Omit<PurchaseRecord, 'purchases'>[]),
-            this.db.query(`SELECT * FROM purchases`).then((r) => r.values as Purchase[]),
-        ]);
 
-        // map purchases to records
-        let records_with_products: PurchaseRecord[] = records.map((record) => {
-            let filtered: PurchaseWithoutId[] = purchases.filter((v) => v.purchase_id === record.id).map((s) => {
-                const { purchase_id, ...ret } = s;
-                return ret as PurchaseWithoutId;
-            });
+    async getPurchaseRecords(): Promise<Record[]> {
+        type DBResult = {
+            "0": { id: number, time: string },
+            "1": Purchase[],
+        }
+        const json = await invoke("get_records") as string;
+        const result = JSON.parse(json) as DBResult[];
 
-            return {
-                purchases: filtered,
-                ...record
-            } as PurchaseRecord
+        const purchases = result.map((r: DBResult) => {
+            let x: Record = {
+                ...r[0],
+                purchases: r[1]
+            }
+            return x;
         });
 
-        return records_with_products;
+
+        return purchases;
 
     }
 
-    async addPurchaseRecord(record: AddPurchase): Promise<void> {
-        const sql = `INSERT INTO purchase_record (time) VALUES (?);`;
-        const res = await this.db.run(sql, [record.time]);
-        if (res.changes !== undefined
-            && res.changes.lastId !== undefined && res.changes.lastId > 0) {
-        } else {
-            throw new Error(`storageService.addPurchaseRecord: lastId not returned`);
-        }
-
-        const purchase_id_u8 = (await this.db.query('SELECT purchase_id FROM purchase_record;')).values as unknown as Uint8Array;
-        const purchase_id = this.convertu8(purchase_id_u8);
-
-        for (const product of record.purchases) {
-            const sql = `INSERT INTO purchases (purchase_id, amount, price, name, description, category) VALUES (?, ?, ?, ?, ?, ?);`;
-            const res = await this.db.run(sql, [
-                purchase_id,
-                product.amount,
-                product.price,
-                product.name,
-                product.description,
-                product.category,
-            ]);
-            if (res.changes !== undefined
-                && res.changes.lastId !== undefined && res.changes.lastId > 0) {
-            } else {
-                throw new Error(`storageService.addPurchaseRecord: lastId not returned`);
-            }
-        }
+    async addPurchaseRecord(record: AddRecord): Promise<void> {
+        await invoke("insert_record", { record });
     }
     async updatePurchaseRecordById(id: number): Promise<void> {
         const sql = `UPDATE purchase_record SET WHERE id=${id}`;

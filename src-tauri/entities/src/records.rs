@@ -12,15 +12,14 @@ pub struct Model {
 }
 
 #[derive(Copy, Clone, Debug, EnumIter, DeriveRelation)]
-pub enum Relation {}
+pub enum Relation {
+    #[sea_orm(has_many = "super::purchases::Entity")]
+    Purchase,
+}
 
-impl Related<super::products::Entity> for Entity {
+impl Related<super::purchases::Entity> for Entity {
     fn to() -> RelationDef {
-        super::purchases::Relation::Product.def()
-    }
-
-    fn via() -> Option<RelationDef> {
-        Some(super::purchases::Relation::Purchase.def().rev())
+        Relation::Purchase.def()
     }
 }
 
