@@ -1,12 +1,8 @@
 import { productService } from '$lib/database/ProductService';
 import type { Product } from '$lib/database/models/Product';
-import { Capacitor } from '@capacitor/core';
-import { Directory, Encoding, Filesystem } from '@capacitor/filesystem';
-import { Share } from '@capacitor/share';
-import { FilePicker } from '@capawesome/capacitor-file-picker';
-import { save } from '@tauri-apps/api/dialog';
-import { writeBinaryFile } from '@tauri-apps/api/fs';
 import { writable } from 'svelte/store';
+import { invoke } from "@tauri-apps/api";
+import { open, save } from "@tauri-apps/api/dialog";
 
 type Store = Map<string, Product[]>;
 
@@ -67,93 +63,47 @@ const fromBinary = (str: string) => {
 
 const exportProducts = async () => {
 	const products: Product[] = await productService.getProducts();
-
-	let csv = products.map((product) => {
-		let { id, ...productWithoutId } = product;
-		return Object.values(productWithoutId).join(",");
-	}).join("\n");
-
-	const platform = Capacitor.getPlatform();
 	const suggestedFilename = "export_einstellungen.csv";
 
-	switch (platform) {
-		case "android":
-			const fileUri = (await Filesystem.writeFile({
-				path: suggestedFilename,
-				data: csv,
-				directory: Directory.Cache,
-				encoding: Encoding.UTF8
-			})).uri;
 
-			await Share.share({
-				title: "Exportiere Daten",
-				url: "file://" + fileUri,
-			});
-			break;
+	const encoder = new TextEncoder();
 
-		case "web": {
-			//@ts-ignore
-			if (window.__TAURI__ !== undefined) {
-				const encoder = new TextEncoder();
+	// Save into the default downloads directory, like in the browser
+	const filePath = await save({
+		defaultPath: suggestedFilename,
+		filters: [{
+			name: 'Text',
+			extensions: ['csv']
+		}]
+	});
 
-				// Save into the default downloads directory, like in the browser
-				const filePath = await save({
-					defaultPath: suggestedFilename,
-				});
-
-				if (filePath == null) {
-					throw Error("Exportieren abgebrochen")
-				}
-
-				await writeBinaryFile(filePath, encoder.encode(csv));
-				break;
-			}
-		}
-		default:
-			throw Error(`Platform nicht unterstützt! (${platform})`);
+	if (filePath == null) {
+		throw Error("Exportieren abgebrochen")
 	}
+
+	await invoke("export_products", {
+		path: filePath,
+		products
+	})
 }
 
 const importProducts = async () => {
-	const CHUNK_SIZE = 4;
-
-	const result = (await FilePicker.pickFiles({
-		types: ['text/csv'],
+	let path = await open({
 		multiple: false,
-		readData: true,
-	})).files[0];
+		filters: [{
+			name: 'Text',
+			extensions: ['csv']
+		}]
+	}) as string;
 
-	const csv_base64 = result.data;
-
-	if (csv_base64 === undefined) {
-		throw Error("file empty!");
-	}
-
-	const csv = fromBinary(csv_base64);
-
-	const products = csv
-		.trim()
-		// split record rows
-		.split("\n")
-		// parse line
-		.map((line) => {
-			let values: string[] = line.trim().split(",");
-
-			return {
-				name: values[0],
-				description: values[1],
-				price: Number(values[2]),
-				category: values[3]
-			} as Omit<Product, 'id'>
-		});
-
-	await productService.flushTable();
+	const products: Product[] = await invoke("import_products", { path });
 
 	for (const product of products) {
 		await productService.addProduct(product);
 	}
 
 	refresh();
+
 }
 
 productService.isInitCompleted.subscribe({

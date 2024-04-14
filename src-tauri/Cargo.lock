@@ -151,6 +151,8 @@ name = "app"
 version = "0.1.0"
 dependencies = [
  "anyhow",
+ "csv-async",
+ "futures",
  "migration",
  "serde",
  "serde_json",
@@ -786,6 +788,31 @@ dependencies = [
 ]
 
 [[package]]
+name = "csv-async"
+version = "1.3.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "d37fe5b0d07f4a8260ce1e9a81413e88f459af0f2dfc55c15e96868a2f99c0f0"
+dependencies = [
+ "cfg-if",
+ "csv-core",
+ "futures",
+ "itoa 1.0.11",
+ "ryu",
+ "serde",
+ "tokio",
+ "tokio-stream",
+]
+
+[[package]]
+name = "csv-core"
+version = "0.1.11"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "5efa2b3d7902f4b634a20cae3c9c4e6209dc4779feb6863329607560143efa70"
+dependencies = [
+ "memchr",
+]
+
+[[package]]
 name = "ctor"
 version = "0.2.7"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -1140,6 +1167,7 @@ checksum = "645c6916888f6cb6350d2550b80fb63e734897a8498abe35cfb732b6487804b0"
 dependencies = [
  "futures-channel",
  "futures-core",
+ "futures-executor",
  "futures-io",
  "futures-sink",
  "futures-task",

@@ -2,10 +2,11 @@
 #![cfg_attr(not(debug_assertions), windows_subsystem = "windows")]
 
 use anyhow::Result;
+use futures::stream::StreamExt;
 use migration::{migrator::Migrator, MigratorTrait};
 use services::{
     sea_orm::{Database, DatabaseConnection},
-    AddRecord, Product, ProductService, RecordService,
+    AddProduct, AddRecord, Product, ProductService, RecordService,
 };
 const DB_URL: &str = "sqlite:///tmp/test.db?mode=rwc";
 
@@ -25,7 +26,11 @@ async fn main() -> Result<()> {
             get_all_products,
             insert_product,
             get_records,
-            insert_record
+            insert_record,
+            import_purchases,
+            export_purchases,
+            import_products,
+            export_products
         ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
@@ -64,6 +69,86 @@ async fn insert_record(state: tauri::State<'_, AppState>, record: AddRecord) -> 
     RecordService::insert_record(&state.db, record)
         .await
         .unwrap();
+
+    Ok(())
+}
+
+#[tauri::command]
+async fn import_purchases(path: String) -> Result<Vec<AddRecord>, String> {
+    let file = tokio::fs::File::open(path)
+        .await
+        .map_err(|e| e.to_string())?;
+    let mut reader = csv_async::AsyncReaderBuilder::new()
+        .has_headers(false)
+        .create_deserializer(file);
+    let mut records = reader.deserialize::<AddRecord>();
+
+    let mut loaded_records: Vec<AddRecord> = Vec::new();
+
+    while let Some(record) = records.next().await {
+        let record: AddRecord = record.map_err(|e| e.to_string())?;
+        loaded_records.push(record);
+    }
+
+    println!("{:?}", loaded_records);
+
+    Ok(loaded_records)
+}
+
+#[tauri::command]
+async fn export_purchases(path: String, records: Vec<AddRecord>) -> Result<(), String> {
+    println!("path: {}", path);
+    let file = tokio::fs::File::create(path)
+        .await
+        .map_err(|e| e.to_string())?;
+
+    let mut writer = csv_async::AsyncWriterBuilder::new()
+        .has_headers(false)
+        .create_serializer(file);
+
+    for record in records {
+        writer.serialize(record).await.map_err(|e| e.to_string())?;
+    }
+
+    Ok(())
+}
+
+#[tauri::command]
+async fn import_products(path: String) -> Result<Vec<AddProduct>, String> {
+    let file = tokio::fs::File::open(path)
+        .await
+        .map_err(|e| e.to_string())?;
+    let mut reader = csv_async::AsyncReaderBuilder::new()
+        .has_headers(false)
+        .create_deserializer(file);
+    let mut products = reader.deserialize::<AddProduct>();
+
+    let mut loaded_records: Vec<AddProduct> = Vec::new();
+
+    while let Some(product) = products.next().await {
+        let product: AddProduct = product.map_err(|e| e.to_string())?;
+        loaded_records.push(product);
+    }
+
+    println!("{:?}", loaded_records);
+
+    Ok(loaded_records)
+}
+
+#[tauri::command]
+async fn export_products(path: String, products: Vec<AddProduct>) -> Result<(), String> {
+    println!("path: {}", path);
+    let file = tokio::fs::File::create(path)
+        .await
+        .map_err(|e| e.to_string())?;
+
+    let mut writer = csv_async::AsyncWriterBuilder::new()
+        .has_headers(false)
+        .create_serializer(file);
+
+    for product in products {
+        writer.serialize(product).await.map_err(|e| e.to_string())?;
+    }
 
     Ok(())
 }

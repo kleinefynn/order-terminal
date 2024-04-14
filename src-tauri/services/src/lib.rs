@@ -12,19 +12,27 @@ use serde::Serialize;
 pub struct ProductService;
 pub struct RecordService;
 
-#[derive(Serialize, Deserialize)]
+#[derive(Serialize, Deserialize, Debug)]
 pub struct AddRecord {
     time: chrono::DateTime<FixedOffset>,
     purchases: Vec<AddPurchase>,
 }
 
-#[derive(Serialize, Deserialize, Clone)]
+#[derive(Serialize, Deserialize, Clone, Debug)]
 pub struct AddPurchase {
     name: String,
     description: Option<String>,
     category: String,
     price: Decimal,
     amount: u32,
+}
+
+#[derive(Serialize, Deserialize, Clone, Debug)]
+pub struct AddProduct {
+    pub name: String,
+    pub description: Option<String>,
+    pub category: String,
+    pub price: Decimal,
 }
 
 impl ProductService {
