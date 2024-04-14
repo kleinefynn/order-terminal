@@ -8,8 +8,10 @@
 	import warenkorb from './warenkorb.store';
 </script>
 
-<div class="flex flex-col gap-6 p-4 sm:px-6 sm:py-0 md:grid md:grid-cols-2 md:gap-8">
-	<div class="col-span-1 flex flex-col gap-8">
+<div
+	class="flex flex-col gap-6 p-4 sm:px-6 sm:py-0 md:grid md:grid-cols-2 md:gap-8 2xl:grid-cols-3"
+>
+	<div class="col-span-1 flex flex-col gap-8 2xl:col-span-2">
 		<slot />
 	</div>
 

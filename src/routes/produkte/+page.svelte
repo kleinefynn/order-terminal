@@ -13,7 +13,7 @@
 			<h5 class="mb-2 text-xl font-bold">{category}</h5>
 			<div class="mx-auto flex w-full flex-col flex-wrap gap-4 md:flex-row">
 				{#each list as fee}
-					<Card.Root class="relative w-full cursor-pointer hover:bg-primary/20 lg:w-fit">
+					<Card.Root class="relative w-full cursor-pointer lg:w-fit">
 						<Card.Header>
 							<Card.Title class="flex flex-row gap-2">
 								<div class="flex w-fit select-none">
