@@ -1,7 +1,6 @@
 use chrono::FixedOffset;
 use sea_orm::entity::prelude::*;
 use serde::{Deserialize, Serialize};
-use super::products::Entity;
 
 #[derive(Clone, Debug, PartialEq, Eq, DeriveEntityModel, Serialize, Deserialize)]
 #[sea_orm(table_name = "records")]
@@ -13,14 +12,15 @@ pub struct Model {
 }
 
 #[derive(Copy, Clone, Debug, EnumIter, DeriveRelation)]
-pub enum Relation {
-    #[sea_orm(has_many = "super::products::Entity")]
-    Product,
-}
+pub enum Relation {}
 
 impl Related<super::products::Entity> for Entity {
     fn to() -> RelationDef {
-        Relation::Product.def()
+        super::purchases::Relation::Product.def()
+    }
+
+    fn via() -> Option<RelationDef> {
+        Some(super::purchases::Relation::Purchase.def().rev())
     }
 }
 

@@ -4,6 +4,7 @@ import { sqliteService } from './SQLiteService';
 import { dbVersionService } from './DbVersionService';
 import { ProductUpgradeStatements } from './upgrades/product.migration';
 import { BehaviorSubject } from 'rxjs';
+import { invoke } from '@tauri-apps/api/tauri'
 
 export interface IProductService {
     initializeDatabase(): Promise<void>
@@ -48,20 +49,18 @@ class ProductService implements IProductService {
         }
     }
     async getProducts(): Promise<Product[]> {
-        return (await this.db.query('SELECT product_id as id, name, description, price, category FROM products;')).values as Product[];
+        //return (await this.db.query('SELECT product_id as id, name, description, price, category FROM products;')).values as Product[];
+        let products: string = await invoke("get_all_products");
+        let p: Product[] = JSON.parse(products);
+        return p;
+
+
     }
     async getProductsWithPurchases(): Promise<Product[]> {
         return (await this.db.query('SELECT product_id as id, name, description, price, category FROM products NATURAL JOIN purchases;')).values as Product[];
     }
-    async addProduct(Product: Omit<Product, 'id'>): Promise<number> {
-        const sql = `INSERT INTO products (name, description, price, category) VALUES (?,?,?,?);`;
-        const res = await this.db.run(sql, [Product.name, Product.description, Product.price, Product.category]);
-        if (res.changes !== undefined
-            && res.changes.lastId !== undefined && res.changes.lastId > 0) {
-            return res.changes.lastId;
-        } else {
-            throw new Error(`storageService.addProduct: lastId not returned`);
-        }
+    async addProduct(product: Omit<Product, 'id'>): Promise<number> {
+        return await invoke("insert_product", { product }) as number;
     }
     async updateProductById(id: number): Promise<void> {
         const sql = `UPDATE products SET WHERE product_id=${id}`;

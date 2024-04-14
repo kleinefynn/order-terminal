@@ -1,0 +1,15 @@
+[package]
+name = "migration"
+version = "0.1.0"
+edition = "2021"
+publish = false
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+tokio = { version = "1.37.0", features = ["full"] }
+sea-orm = "0.12.15"
+sea-orm-migration = { version = "0.12.5", features = [
+    "sqlx-sqlite",
+    "runtime-tokio-native-tls",
+] }

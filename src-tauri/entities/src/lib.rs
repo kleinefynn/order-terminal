@@ -1,2 +1,3 @@
 pub mod products;
-pub mod time_records;
+pub mod purchases;
+pub mod records;
