@@ -31,15 +31,11 @@ const refresh = async () => {
 	set(products_map);
 }
 
-const remove = async (category: string, id: number) => {
+const remove = async (id: number) => {
 	try {
 		await productService.deleteProductById(id);
 
-		update((store: Store) => {
-			let products = store.get(category);
-			delete products?.filter((v) => v.id === id)[0];
-			return store;
-		});
+		await refresh();
 	} catch (e) {
 		console.error(e);
 

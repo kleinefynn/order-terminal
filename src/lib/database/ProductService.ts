@@ -67,8 +67,7 @@ class ProductService implements IProductService {
         await this.db.run(sql);
     }
     async deleteProductById(id: number): Promise<void> {
-        const sql = `DELETE FROM products WHERE product_id=${id}`;
-        await this.db.run(sql);
+        await invoke("delete_product", { id })
     }
     async flushTable(): Promise<void> {
         const sql = `DELETE FROM products`;

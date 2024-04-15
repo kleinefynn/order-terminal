@@ -5,9 +5,12 @@ use anyhow::Result;
 use futures::stream::StreamExt;
 use migration::{migrator::Migrator, MigratorTrait};
 use services::{
+    product::{AddProduct, ProductService},
+    record::{AddRecord, RecordService},
     sea_orm::{Database, DatabaseConnection},
-    AddProduct, AddRecord, Product, ProductService, RecordService,
+    Product,
 };
+use tauri::Manager;
 const DB_URL: &str = "sqlite:///tmp/test.db?mode=rwc";
 
 #[tokio::main]
@@ -22,10 +25,38 @@ async fn main() -> Result<()> {
 
     tauri::Builder::default()
         .manage(state)
+        .setup(|app| {
+            let main_window = app.get_window("main").unwrap();
+
+            let _ = main_window.with_webview(|webview| {
+                #[cfg(target_os = "linux")]
+                {
+                    // see https://docs.rs/webkit2gtk/0.18.2/webkit2gtk/struct.WebView.html
+                    // and https://docs.rs/webkit2gtk/0.18.2/webkit2gtk/trait.WebViewExt.html
+                    use webkit2gtk::traits::WebViewExt;
+                    webview.inner().set_zoom_level(1.5);
+                }
+
+                #[cfg(windows)]
+                unsafe {
+                    // see https://docs.rs/webview2-com/0.19.1/webview2_com/Microsoft/Web/WebView2/Win32/struct.ICoreWebView2Controller.html
+                    webview.controller().SetZoomFactor(1.5).unwrap();
+                }
+
+                #[cfg(target_os = "macos")]
+                unsafe {
+                    let () = msg_send![webview.inner(), setPageZoom: 1.5];
+                }
+            });
+
+            Ok(())
+        })
         .invoke_handler(tauri::generate_handler![
             get_all_products,
             insert_product,
+            delete_product,
             get_records,
+            get_records_paginated,
             insert_record,
             import_purchases,
             export_purchases,
@@ -59,8 +90,26 @@ async fn insert_product(
 }
 
 #[tauri::command]
+async fn delete_product(state: tauri::State<'_, AppState>, id: i32) -> Result<(), String> {
+    let _ = ProductService::delete_product(&state.db, id).await.unwrap();
+    Ok(())
+}
+
+#[tauri::command]
 async fn get_records(state: tauri::State<'_, AppState>) -> Result<String, String> {
     let res = RecordService::get_all_records(&state.db).await.unwrap();
+    Ok(serde_json::to_string(&res).expect("Serialize failed!"))
+}
+
+#[tauri::command]
+async fn get_records_paginated(
+    state: tauri::State<'_, AppState>,
+    offset: u32,
+    limit: u64,
+) -> Result<String, String> {
+    let res = RecordService::get_paginated_records(&state.db, offset, limit)
+        .await
+        .unwrap();
     Ok(serde_json::to_string(&res).expect("Serialize failed!"))
 }
 

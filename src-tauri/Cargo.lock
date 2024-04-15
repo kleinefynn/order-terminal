@@ -160,6 +160,7 @@ dependencies = [
  "tauri",
  "tauri-build",
  "tokio",
+ "webkit2gtk",
 ]
 
 [[package]]
