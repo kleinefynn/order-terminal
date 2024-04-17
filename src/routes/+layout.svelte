@@ -84,19 +84,19 @@
 			<Tooltip.Root>
 				<Tooltip.Trigger asChild let:builder>
 					<a
-						href="/kasse"
+						href="/erfassung"
 						class="flex h-9 w-9 items-center justify-center rounded-lg transition-colors hover:text-foreground md:h-8 md:w-8"
-						class:text-accent-foreground={$page.url.pathname === '/kasse'}
-						class:bg-accent={$page.url.pathname === '/kasse'}
-						class:text-muted-foreground={$page.url.pathname !== '/kasse'}
+						class:text-accent-foreground={$page.url.pathname === '/erfassung'}
+						class:bg-accent={$page.url.pathname === '/erfassung'}
+						class:text-muted-foreground={$page.url.pathname !== '/erfassung'}
 						use:builder.action
 						{...builder}
 					>
 						<ShoppingCart class="h-5 w-5" />
-						<span class="sr-only">Bestellung</span>
+						<span class="sr-only">Erfassung</span>
 					</a>
 				</Tooltip.Trigger>
-				<Tooltip.Content side="right">Bestellung</Tooltip.Content>
+				<Tooltip.Content side="right">Erfassung</Tooltip.Content>
 			</Tooltip.Root>
 			<Tooltip.Root>
 				<Tooltip.Trigger asChild let:builder>
@@ -176,10 +176,10 @@
 							Dashboard
 						</a>-->
 						<a
-							href="/kasse"
+							href="/erfassung"
 							class="flex items-center gap-4 px-2.5 hover:text-foreground"
-							class:text-accent-foreground={$page.url.pathname === '/kasse'}
-							class:text-muted-foreground={$page.url.pathname !== '/kasse'}
+							class:text-accent-foreground={$page.url.pathname === '/erfassung'}
+							class:text-muted-foreground={$page.url.pathname !== '/erfassung'}
 						>
 							<ShoppingCart class="h-5 w-5" />
 							Erfassen
@@ -239,7 +239,7 @@
 					<Moon
 						class="absolute h-5 w-5 rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100"
 					/>
-					<span class="sr-only">Toggle theme</span>
+					<span class="sr-only">Hell/Dunkel</span>
 				</Button>
 			</div>
 		</header>
