@@ -16,7 +16,7 @@
             "url": "https://github.com/kleinefynn/order-terminal/releases/download/v1.0.0/app-amd64.AppImage.tar.gz"
         },
         "windows-x86_64": {
-            "signature": "Content of app-setup.nsis.sig or app.msi.sig, depending on the chosen format",
+            "signature": "dW50cnVzdGVkIGNvbW1lbnQ6IHNpZ25hdHVyZSBmcm9tIHRhdXJpIHNlY3JldCBrZXkKUlVUUklNSWZyNFJTdUlkYS9FN1pBL1RQZmowTitYOGFPM0xJSGtGYlhmYW9SQ1Nhcll3Q2FQbkRudjhWWkhWSmF6Sk1peWJLcTM1dUppc2IvVTF2ekpNL1VsUndEUE1mQWdNPQp0cnVzdGVkIGNvbW1lbnQ6IHRpbWVzdGFtcDoxNzEzMzg5NTY1CWZpbGU6b3JkZXItdGVybWluYWxfMC4xLjBfeDY0LXNldHVwLm5zaXMuemlwCnZEU2hIY2xRaTJMcFhMZ0txMDBkdUJWVjE0OE1EVHh2cnI5S3FDb3ByTEFQTHBDNCtpc29QamN0TzNocmMzUjF3d2VRRys2bEtCdFlqQkJVald6ZEF3PT0K",
             "url": "https://github.com/kleinefynn/order-terminal/releases/download/v1.0.0/app-x64-setup.nsis.zip"
         }
     }
