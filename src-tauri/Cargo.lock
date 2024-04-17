@@ -148,7 +148,7 @@ checksum = "f538837af36e6f6a9be0faa67f9a314f8119e4e4b5867c6ab40ed60360142519"
 
 [[package]]
 name = "app"
-version = "0.1.0"
+version = "1.0.0"
 dependencies = [
  "anyhow",
  "csv-async",
@@ -1009,7 +1009,7 @@ dependencies = [
 
 [[package]]
 name = "entities"
-version = "0.1.0"
+version = "1.0.0"
 dependencies = [
  "chrono",
  "rust_decimal",
@@ -2070,7 +2070,7 @@ dependencies = [
 
 [[package]]
 name = "migration"
-version = "0.1.0"
+version = "1.0.0"
 dependencies = [
  "sea-orm",
  "sea-orm-migration",
@@ -3445,7 +3445,7 @@ dependencies = [
 
 [[package]]
 name = "services"
-version = "0.1.0"
+version = "1.0.0"
 dependencies = [
  "chrono",
  "entities",
