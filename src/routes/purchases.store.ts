@@ -66,7 +66,7 @@ const importPurchases = async () => {
 
 }
 
-await refresh();
+refresh().then(() => {});
 
 export default {
     subscribe,

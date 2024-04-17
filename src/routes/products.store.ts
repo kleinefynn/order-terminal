@@ -96,7 +96,7 @@ const importProducts = async () => {
 
 }
 
-await refresh();
+refresh().then(() => {});
 
 
 export default {
