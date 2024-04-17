@@ -29,6 +29,8 @@ csv-async = { version = "1.3.0", features = ["with_serde", "tokio"] }
 services = { path = "./services" }
 migration = { path = "./migration" }
 futures = "0.3.30"
+
+[target.'cfg(unix)'.dependencies]
 webkit2gtk = "*"
 
 [features]
