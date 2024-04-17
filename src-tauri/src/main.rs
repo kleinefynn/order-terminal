@@ -11,11 +11,15 @@ use services::{
     Product,
 };
 use tauri::Manager;
-const DB_URL: &str = "sqlite:///tmp/test.db?mode=rwc";
 
 #[tokio::main]
 async fn main() -> Result<()> {
-    let db = Database::connect(DB_URL)
+	
+	let temp_dir = std::env::temp_dir().into_os_string().into_string().unwrap();
+	
+	let path = format!("sqlite://{temp_dir}/test.db?mode=rwc");
+	
+    let db = Database::connect(path)
         .await
         .expect("Database connection failed");
 
