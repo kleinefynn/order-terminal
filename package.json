@@ -10,9 +10,7 @@
     "check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch",
     "test": "vitest",
     "lint": "prettier --check . && eslint .",
-    "format": "prettier --write .",
-    "start": "ts-node src/index.ts",
-    "typeorm": "typeorm-ts-node-commonjs"
+    "format": "prettier --write ."
   },
   "devDependencies": {
     "@sveltejs/adapter-auto": "^3.0.0",

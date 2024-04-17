@@ -11,6 +11,8 @@
 <div
 	on:click
 	on:keydown
+	role="cell"
+	tabindex="0"
 	class={cn("rounded-lg border bg-card text-card-foreground shadow-sm", className)}
 	{...$$restProps}
 >

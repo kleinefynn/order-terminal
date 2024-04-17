@@ -17,45 +17,6 @@
 	import * as Tooltip from '$lib/components/ui/tooltip/index.js';
 	import { page } from '$app/stores';
 	import { Toaster } from '$lib/components/ui/sonner';
-
-	// SETUP SQLITE;
-	import { afterUpdate } from 'svelte';
-	import { Capacitor } from '@capacitor/core';
-	import { defineCustomElements as jeepSqlite, applyPolyfills } from 'jeep-sqlite/loader';
-	import AppInitializer from '$lib/components/AppInitializer.svelte';
-
-	let toRender = false;
-	const platform = Capacitor.getPlatform();
-
-	// Check if we're in the browser environment
-	if (typeof window !== 'undefined') {
-		applyPolyfills().then(() => {
-			jeepSqlite(window);
-		});
-		if (platform === 'web') {
-			const jeepEl = document.createElement('jeep-sqlite');
-			document.body.appendChild(jeepEl);
-			customElements
-				.whenDefined('jeep-sqlite')
-				.then(() => {
-					toRender = true;
-				})
-				.catch((err) => {
-					console.error(`Error: ${err}`);
-					throw new Error(`Error: ${err}`);
-				});
-		} else {
-			toRender = true;
-		}
-	} else {
-		toRender = true;
-	}
-	// Wait until after the component updates to check if `jeep-sqlite` is defined
-	afterUpdate(() => {
-		if (!toRender) {
-			return;
-		}
-	});
 </script>
 
 <Toaster />
@@ -244,7 +205,6 @@
 			</div>
 		</header>
 		<main>
-			<AppInitializer />
 			<slot />
 		</main>
 	</div>

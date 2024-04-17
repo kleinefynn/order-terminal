@@ -3,7 +3,7 @@
     "beforeBuildCommand": "bun run build",
     "beforeDevCommand": "bun run dev",
     "devPath": "http://localhost:5173",
-    "distDir": "../static"
+    "distDir": "../build"
   },
   "package": {
     "productName": "order-terminal",
