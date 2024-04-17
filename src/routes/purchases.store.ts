@@ -12,12 +12,6 @@ const refresh = async () => {
     set(data);
 }
 
-purchaseRecordService.isInitCompleted.subscribe({
-    complete: async () => {
-        await refresh();
-    }
-})
-
 const add = (...records: Record[]) => {
     update((store: Record[]) => {
         store.push(...records);
@@ -72,7 +66,7 @@ const importPurchases = async () => {
 
 }
 
-
+await refresh();
 
 export default {
     subscribe,

@@ -96,11 +96,7 @@ const importProducts = async () => {
 
 }
 
-productService.isInitCompleted.subscribe({
-	complete: async () => {
-		await refresh();
-	}
-});
+await refresh();
 
 
 export default {
