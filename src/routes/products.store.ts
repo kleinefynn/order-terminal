@@ -34,11 +34,9 @@ const refresh = async () => {
 const remove = async (id: number) => {
 	try {
 		await productService.deleteProductById(id);
-
 		await refresh();
 	} catch (e) {
 		console.error(e);
-
 	}
 }
 
@@ -51,18 +49,14 @@ const add = async (product: Omit<Product, 'id'>) => {
 	}
 }
 
-const fromBinary = (str: string) => {
-	return decodeURIComponent(Array.prototype.map.call(atob(str), function (c) {
-		return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2)
-	}).join(''))
+const edit = async (product: Product) => {
+	await invoke("update_product", { product });
+	await refresh();
 }
 
 const exportProducts = async () => {
 	const products: Product[] = await productService.getProducts();
 	const suggestedFilename = "export_einstellungen.csv";
-
-
-	const encoder = new TextEncoder();
 
 	// Save into the default downloads directory, like in the browser
 	const filePath = await save({
@@ -113,6 +107,7 @@ export default {
 	subscribe,
 	add,
 	remove,
+	edit,
 	exportProducts,
 	importProducts
 };

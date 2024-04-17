@@ -1,5 +1,4 @@
 <script lang="ts">
-	import CaretSort from 'lucide-svelte/icons/ellipsis';
 	import { Render, Subscribe, createRender, createTable } from 'svelte-headless-table';
 	import {
 		addFlatten,
@@ -101,13 +100,7 @@
 							{#each row.cells as cell (cell.id)}
 								<Subscribe attrs={cell.attrs()} let:attrs>
 									<Table.Cell class="[&:has([role=checkbox])]:pl-3" {...attrs}>
-										{#if cell.id === 'amount'}
-											<div class="text-right font-medium">
-												<Render of={cell.render()} />
-											</div>
-										{:else}
-											<Render of={cell.render()} />
-										{/if}
+										<Render of={cell.render()} />
 									</Table.Cell>
 								</Subscribe>
 							{/each}

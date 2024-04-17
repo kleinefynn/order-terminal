@@ -1,7 +1,9 @@
 use entities::products as Product;
 use entities::rust_decimal::Decimal;
-use sea_orm::DeleteResult;
-use sea_orm::{ActiveValue, DatabaseConnection, DbErr, EntityTrait, InsertResult, IntoActiveModel};
+use sea_orm::{
+    ActiveValue, DatabaseConnection, DbErr, EntityTrait, InsertResult, IntoActiveModel, QueryFilter,
+};
+use sea_orm::{ColumnTrait, DeleteResult};
 use serde::Deserialize;
 use serde::Serialize;
 
@@ -9,6 +11,15 @@ pub struct ProductService;
 
 #[derive(Serialize, Deserialize, Clone, Debug)]
 pub struct AddProduct {
+    pub name: String,
+    pub description: Option<String>,
+    pub category: String,
+    pub price: Decimal,
+}
+
+#[derive(Serialize, Deserialize, Clone, Debug)]
+pub struct UpdateProduct {
+    pub id: i32,
     pub name: String,
     pub description: Option<String>,
     pub category: String,
@@ -27,6 +38,23 @@ impl ProductService {
         let mut p: Product::ActiveModel = product.into_active_model();
         p.id = ActiveValue::NotSet;
         Product::Entity::insert(p).exec(db).await
+    }
+
+    pub async fn update_product(
+        db: &DatabaseConnection,
+        product: UpdateProduct,
+    ) -> Result<entities::products::Model, DbErr> {
+        let p: Product::ActiveModel = Product::ActiveModel {
+            id: ActiveValue::Unchanged(product.id),
+            name: ActiveValue::Set(product.name),
+            description: ActiveValue::Set(product.description),
+            category: ActiveValue::Set(product.category),
+            price: ActiveValue::Set(product.price),
+        };
+        Product::Entity::update(p)
+            .filter(Product::Column::Id.eq(product.id))
+            .exec(db)
+            .await
     }
 
     pub async fn delete_product(

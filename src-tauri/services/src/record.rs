@@ -2,6 +2,7 @@ use chrono::FixedOffset;
 use entities::purchases as Purchase;
 use entities::records as Record;
 use entities::rust_decimal::Decimal;
+use sea_orm::DeleteResult;
 use sea_orm::{ActiveValue, DatabaseConnection, DbErr, EntityTrait, InsertResult};
 use serde::Deserialize;
 use serde::Serialize;
@@ -87,5 +88,12 @@ impl RecordService {
             .await?;
 
         Ok(())
+    }
+
+    pub async fn delete_record(
+        db: &DatabaseConnection,
+        id: i32,
+    ) -> Result<DeleteResult, sea_orm::DbErr> {
+        Record::Entity::delete_by_id(id).exec(db).await
     }
 }

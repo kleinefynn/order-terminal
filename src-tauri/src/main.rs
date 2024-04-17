@@ -5,7 +5,7 @@ use anyhow::Result;
 use futures::stream::StreamExt;
 use migration::{migrator::Migrator, MigratorTrait};
 use services::{
-    product::{AddProduct, ProductService},
+    product::{AddProduct, ProductService, UpdateProduct},
     record::{AddRecord, RecordService},
     sea_orm::{Database, DatabaseConnection},
     Product,
@@ -54,10 +54,12 @@ async fn main() -> Result<()> {
         .invoke_handler(tauri::generate_handler![
             get_all_products,
             insert_product,
+            update_product,
             delete_product,
             get_records,
             get_records_paginated,
             insert_record,
+            delete_record,
             import_purchases,
             export_purchases,
             import_products,
@@ -90,6 +92,17 @@ async fn insert_product(
 }
 
 #[tauri::command]
+async fn update_product(
+    state: tauri::State<'_, AppState>,
+    product: UpdateProduct,
+) -> Result<(), String> {
+    let _ = ProductService::update_product(&state.db, product)
+        .await
+        .unwrap();
+    Ok(())
+}
+
+#[tauri::command]
 async fn delete_product(state: tauri::State<'_, AppState>, id: i32) -> Result<(), String> {
     let _ = ProductService::delete_product(&state.db, id).await.unwrap();
     Ok(())
@@ -118,6 +131,13 @@ async fn insert_record(state: tauri::State<'_, AppState>, record: AddRecord) -> 
     RecordService::insert_record(&state.db, record)
         .await
         .unwrap();
+
+    Ok(())
+}
+
+#[tauri::command]
+async fn delete_record(state: tauri::State<'_, AppState>, id: i32) -> Result<(), String> {
+    RecordService::delete_record(&state.db, id).await.unwrap();
 
     Ok(())
 }

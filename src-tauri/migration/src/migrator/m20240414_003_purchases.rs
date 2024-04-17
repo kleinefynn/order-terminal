@@ -27,7 +27,8 @@ impl MigrationTrait for Migration {
                     .foreign_key(
                         ForeignKey::create()
                             .from(Purchases::Table, Purchases::RecordId)
-                            .to(Records::Table, Records::Id),
+                            .to(Records::Table, Records::Id)
+                            .on_delete(ForeignKeyAction::Cascade),
                     )
                     .to_owned(),
             )

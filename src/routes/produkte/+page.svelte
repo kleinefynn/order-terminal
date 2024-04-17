@@ -5,13 +5,20 @@
 	import AddCard from './AddCard.svelte';
 	import * as DropdownMenu from '$lib/components/ui/dropdown-menu';
 	import { Button } from '$lib/components/ui/button';
-
-	$: entries: $products.entries();
+	import EditCard from './EditCard.svelte';
+	import type { Product } from '$lib/database/models/Product';
 
 	async function deleteProduct(id: number): Promise<void> {
 		await products.remove(id);
 	}
+
+	let edit_open = false;
+	let edit_product: Product;
 </script>
+
+{#if edit_product}
+	<EditCard bind:product={edit_product} bind:open={edit_open}></EditCard>
+{/if}
 
 <div class="w-full">
 	{#each $products.entries() as [category, list]}
@@ -36,7 +43,13 @@
 											<DropdownMenu.Group>
 												<DropdownMenu.Label>Aktionen</DropdownMenu.Label>
 												<DropdownMenu.Separator />
-												<DropdownMenu.Item class="cursor-pointer">Editieren</DropdownMenu.Item>
+												<DropdownMenu.Item
+													class="cursor-pointer"
+													on:click={() => {
+														edit_open = true;
+														edit_product = product;
+													}}>Editieren</DropdownMenu.Item
+												>
 												<DropdownMenu.Item
 													class="cursor-pointer"
 													on:click={() => deleteProduct(product.id)}>Löschen</DropdownMenu.Item

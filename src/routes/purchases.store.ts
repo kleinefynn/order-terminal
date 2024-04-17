@@ -25,18 +25,14 @@ const add = (...records: Record[]) => {
     });
 }
 
-const fromBinary = (str: string) => {
-    return decodeURIComponent(Array.prototype.map.call(atob(str), function (c) {
-        return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2)
-    }).join(''))
+const deleteRecord = async (id: number) => {
+    await invoke("delete_record", { id });
+    await refresh();
 }
 
 const exportPurchases = async () => {
     const records: Record[] = await purchaseRecordService.getPurchaseRecords();
     const suggestedFilename = "export_daten.csv";
-
-
-    const encoder = new TextEncoder();
 
     // Save into the default downloads directory, like in the browser
     const filePath = await save({
@@ -72,7 +68,7 @@ const importPurchases = async () => {
         await purchaseRecordService.addPurchaseRecord(record);
     }
 
-    refresh();
+    await refresh();
 
 }
 
@@ -82,6 +78,7 @@ export default {
     subscribe,
     add,
     refresh,
+    deleteRecord,
     exportPurchases,
     importPurchases
 }
