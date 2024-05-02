@@ -15,6 +15,7 @@ pub struct AddProduct {
     pub description: Option<String>,
     pub category: String,
     pub price: Decimal,
+    pub is_entry_card: bool,
 }
 
 #[derive(Serialize, Deserialize, Clone, Debug)]
@@ -24,6 +25,7 @@ pub struct UpdateProduct {
     pub description: Option<String>,
     pub category: String,
     pub price: Decimal,
+    pub is_entry_card: bool,
 }
 
 impl ProductService {
@@ -50,6 +52,7 @@ impl ProductService {
             description: ActiveValue::Set(product.description),
             category: ActiveValue::Set(product.category),
             price: ActiveValue::Set(product.price),
+            is_entry_card: ActiveValue::Set(product.is_entry_card),
         };
         Product::Entity::update(p)
             .filter(Product::Column::Id.eq(product.id))

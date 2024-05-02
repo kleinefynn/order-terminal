@@ -27,6 +27,11 @@ impl MigrationTrait for Migration {
                     .col(ColumnDef::new(Products::Description).text())
                     .col(ColumnDef::new(Products::Category).text().not_null())
                     .col(ColumnDef::new(Products::Price).decimal().not_null())
+                    .col(
+                        ColumnDef::new(Products::IsEntryCard)
+                            .boolean()
+                            .default(false),
+                    )
                     .to_owned(),
             )
             .await
@@ -48,4 +53,5 @@ pub enum Products {
     Description,
     Category,
     Price,
+    IsEntryCard,
 }

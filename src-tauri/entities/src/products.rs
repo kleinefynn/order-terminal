@@ -15,6 +15,7 @@ pub struct Model {
     pub category: String,
     #[serde(with = "rust_decimal::serde::arbitrary_precision")]
     pub price: Decimal,
+    pub is_entry_card: bool,
 }
 
 #[derive(Copy, Clone, Debug, EnumIter, DeriveRelation)]

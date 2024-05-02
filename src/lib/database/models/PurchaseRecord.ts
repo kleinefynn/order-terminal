@@ -5,6 +5,7 @@ export interface Purchase {
     category: string,
     price: number,
     amount: number,
+    isEntryCard: boolean,
 }
 
 export interface Record {
