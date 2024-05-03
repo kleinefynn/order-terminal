@@ -6,6 +6,7 @@
 	import { Button } from '$lib/components/ui/button';
 	import productsStore from '../products.store';
 	import type { Product } from '$lib/database/models/Product';
+	import Checkbox from '$lib/components/ui/checkbox/checkbox.svelte';
 
 	export let category: string = '';
 	export let open = false;
@@ -14,14 +15,18 @@
 	let description: string;
 	let categoryStr: string = category.toString();
 	let price: number = 3.0;
+	let isEntryCard = false;
 
 	const submit = async () => {
 		const data = {
 			name,
 			description,
 			category: categoryStr,
-			price
+			price,
+			is_entry_card: isEntryCard
 		} as Omit<Product, 'id'>;
+		console.log(isEntryCard);
+
 		await productsStore.add(data);
 		open = false;
 	};
@@ -82,8 +87,6 @@
 						class="col-span-3"
 						bind:value={categoryStr}
 					/>
-				</div>
-				<div class="grid grid-cols-4 items-center gap-4">
 					<Label for="price" class="text-right">Preis</Label>
 					<Input
 						id="price"
@@ -93,6 +96,9 @@
 						class="col-span-3"
 						bind:value={price}
 					/>
+
+					<Label for="is_entry_card" class="text-right">Eintrittskarte</Label>
+					<Checkbox id="is_entry_card" bind:checked={isEntryCard} />
 				</div>
 			</div>
 			<Dialog.Footer>

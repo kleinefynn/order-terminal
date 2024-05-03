@@ -4,5 +4,5 @@ export interface Product {
     description?: string,
     price: number,
     category: string,
-    isEntryCard: boolean,
+    is_entry_card: boolean,
 }

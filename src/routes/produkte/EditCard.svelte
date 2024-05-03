@@ -2,10 +2,10 @@
 	import * as Dialog from '$lib/components/ui/dialog/';
 	import { Label } from '$lib/components/ui/label';
 	import { Input } from '$lib/components/ui/input';
-	import * as Card from '$lib/components/ui/card';
 	import { Button } from '$lib/components/ui/button';
 	import productsStore from '../products.store';
 	import type { Product } from '$lib/database/models/Product';
+	import Checkbox from '$lib/components/ui/checkbox/checkbox.svelte';
 
 	export let open = false;
 	export let product: Product;
@@ -14,6 +14,7 @@
 	let description: string = product.description ?? '';
 	let category: string = product.category;
 	let price: number = product.price;
+	let is_entry_card = product.is_entry_card;
 
 	const submit = async () => {
 		const data = {
@@ -21,8 +22,11 @@
 			name,
 			description,
 			category,
-			price
+			price,
+			is_entry_card
 		} as Product;
+
+		console.log(data);
 
 		await productsStore.edit(data);
 		open = false;
@@ -57,8 +61,6 @@
 
 					<Label for="category" class="text-right">Kategorie</Label>
 					<Input id="category" class="col-span-3" bind:value={category} />
-				</div>
-				<div class="grid grid-cols-4 items-center gap-4">
 					<Label for="price" class="text-right">Preis</Label>
 					<Input
 						id="price"
@@ -68,6 +70,8 @@
 						class="col-span-3"
 						bind:value={price}
 					/>
+					<Label for="is_entry_card" class="text-right">Eintrittskarte</Label>
+					<Checkbox id="is_entry_card" bind:checked={is_entry_card} />
 				</div>
 			</div>
 			<Dialog.Footer>
