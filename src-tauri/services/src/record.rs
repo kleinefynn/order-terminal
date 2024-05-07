@@ -21,6 +21,7 @@ pub struct AddPurchase {
     category: String,
     price: Decimal,
     amount: u32,
+    is_entry_card: bool,
 }
 
 impl RecordService {
@@ -81,6 +82,7 @@ impl RecordService {
                     category: ActiveValue::Set(product.category),
                     price: ActiveValue::Set(product.price),
                     amount: ActiveValue::Set(product.amount),
+                    is_entry_card: ActiveValue::Set(product.is_entry_card),
                 });
 
         Purchase::Entity::insert_many(purchase_models)

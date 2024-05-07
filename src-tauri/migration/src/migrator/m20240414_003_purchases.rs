@@ -30,6 +30,11 @@ impl MigrationTrait for Migration {
                             .to(Records::Table, Records::Id)
                             .on_delete(ForeignKeyAction::Cascade),
                     )
+                    .col(
+                        ColumnDef::new(Purchases::IsEntryCard)
+                            .boolean()
+                            .default(false),
+                    )
                     .to_owned(),
             )
             .await
@@ -52,4 +57,5 @@ pub enum Purchases {
     Category,
     Price,
     Amount,
+    IsEntryCard,
 }

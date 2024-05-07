@@ -26,8 +26,6 @@
 			is_entry_card
 		} as Product;
 
-		console.log(data);
-
 		await productsStore.edit(data);
 		open = false;
 	};

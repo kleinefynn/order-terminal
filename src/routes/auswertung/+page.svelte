@@ -45,6 +45,30 @@
 			}
 		}),
 		table.column({
+			header: 'Einnahmen',
+			id: 'revenue',
+			accessor: 'purchases',
+			cell: ({ value }) => {
+				let sum = value
+					.map((purchase) => purchase.price * purchase.amount)
+					.reduce((partialSum, a) => partialSum + a, 0)
+					.toFixed(2);
+
+				return `${sum}€`;
+			}
+		}),
+		table.column({
+			header: 'Anzahl Personen',
+			id: 'count_people',
+			accessor: 'purchases',
+			cell: ({ value }) => {
+				return value
+					.filter((purchase) => purchase.is_entry_card)
+					.map((purchases) => purchases.amount)
+					.reduce((partialSum, a) => partialSum + a, 0);
+			}
+		}),
+		table.column({
 			accessor: ({ id }) => id,
 			header: '',
 			cell: ({ value }) => {
