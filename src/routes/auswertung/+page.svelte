@@ -29,7 +29,7 @@
 
 	const columns = table.createColumns([
 		table.column({
-			header: 'Time',
+			header: 'Erfassungspunkt',
 			accessor: 'time',
 			cell: ({ value }) => {
 				const date = new Date(value);
