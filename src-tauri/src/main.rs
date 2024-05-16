@@ -14,11 +14,10 @@ use tauri::Manager;
 
 #[tokio::main]
 async fn main() -> Result<()> {
-	
-	let temp_dir = std::env::temp_dir().into_os_string().into_string().unwrap();
-	
-	let path = format!("sqlite://{temp_dir}/test.db?mode=rwc");
-	
+    let temp_dir = std::env::temp_dir().into_os_string().into_string().unwrap();
+
+    let path = format!("sqlite://{temp_dir}/test.db?mode=rwc");
+
     let db = Database::connect(path)
         .await
         .expect("Database connection failed");

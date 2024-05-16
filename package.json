@@ -55,6 +55,7 @@
     "bits-ui": "^0.21.7",
     "clsx": "^2.1.0",
     "cmdk-sv": "^0.0.17",
+    "echarts": "^5.5.0",
     "embla-carousel-svelte": "^8.0.0",
     "formsnap": "^1.0.0",
     "jeep-sqlite": "^2.6.2",

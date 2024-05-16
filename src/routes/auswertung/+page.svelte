@@ -12,7 +12,6 @@
 	import * as Table from '$lib/components/ui/table/index.js';
 	import { Button } from '$lib/components/ui/button/index.js';
 	import { cn } from '$lib/utils.js';
-	import { Input } from '$lib/components/ui/input/index.js';
 	import type { Record } from '$lib/database/models/PurchaseRecord';
 	import data from '../purchases.store';
 
@@ -94,12 +93,60 @@
 	const { filterValue } = pluginStates.filter;
 
 	const { selectedDataIds } = pluginStates.select;
+
+	import { echarts, getVirtualData } from './echarts';
+
+	let heatmapData: [string, number][] = [];
+	data.subscribe((value: Record[]) => {
+		heatmapData = value.map((record) => {
+			let time = record.time;
+			let countPeople = record.purchases
+				.filter((purchase) => purchase.is_entry_card)
+				.map((purchases) => purchases.amount)
+				.reduce((partialSum, a) => partialSum + a, 0);
+
+			return [time, countPeople];
+		});
+	});
+	let option = {
+		title: {
+			top: 0,
+			left: 'center',
+			text: 'Tägliche Eintritte'
+		},
+		tooltip: {},
+		visualMap: {
+			min: 0,
+			max: 100,
+			type: 'piecewise',
+			orient: 'horizontal',
+			left: 'center',
+			top: 35
+		},
+		calendar: {
+			top: 90,
+			left: 0,
+			right: 0,
+			cellSize: ['auto'],
+			range: '2024',
+			itemStyle: {
+				borderWidth: 0.5
+			},
+			yearLabel: { show: false }
+		},
+		series: {
+			type: 'heatmap',
+			coordinateSystem: 'calendar',
+			data: heatmapData
+		}
+	};
 </script>
 
 <div class="w-full">
-	<div class="mb-4 flex items-center gap-4">
-		<Input class="max-w-sm" placeholder="Durchsuchen..." type="text" bind:value={$filterValue} />
-	</div>
+	<!-- Charts -->
+	<div class="container mb-6 mt-[-3rem] min-h-60" use:echarts={option} />
+	<!-- Table -->
+
 	<div class="rounded-md border">
 		<Table.Root {...$tableAttrs}>
 			<Table.Header>
@@ -152,3 +199,6 @@
 		>
 	</div>
 </div>
+
+<style>
+</style>
