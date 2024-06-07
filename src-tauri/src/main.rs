@@ -13,10 +13,18 @@ use services::{
 use tauri::Manager;
 
 #[tokio::main]
-async fn main() -> Result<()> {
-    let temp_dir = std::env::temp_dir().into_os_string().into_string().unwrap();
+async fn main() -> Result<()> { 
+    let dir = {
+        let dir = std::env::current_dir();
 
-    let path = format!("sqlite://{temp_dir}/test.db?mode=rwc");
+        match dir {
+            Err(_e) => std::env::temp_dir().into_os_string().into_string().unwrap(),
+            Ok(path) => path.into_os_string().into_string().unwrap(),
+        }
+    };
+    
+
+    let path = format!("sqlite://{dir}/datenbank.db?mode=rwc");
 
     let db = Database::connect(path)
         .await
